@@ -31,11 +31,6 @@ export const HeroSection: React.FC = () => {
       <div className="relative z-10 my-auto pt-28 sm:pt-32 pb-8">
         <Container size="xl">
           <div className="max-w-2xl">
-            {/* Minimal Micro-Tag */}
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.08] backdrop-blur-md border border-white/15 text-slate-300 text-[10px] sm:text-xs font-mono tracking-widest uppercase mb-5">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              <span>Structural Engineering • Est. 2008</span>
-            </div>
 
             {/* Ultra-Modern, Elegant Architectural Headline */}
             <h1 className="text-3xl sm:text-5xl md:text-6xl font-light tracking-tight text-white mb-6 sm:mb-8 leading-[1.14]">
