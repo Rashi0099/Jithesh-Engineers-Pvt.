@@ -80,13 +80,6 @@ export const ProjectsSection: React.FC = () => {
                 {/* Subtle Gradient for Overlays */}
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-black/20" />
 
-                {/* Category Badge Top Left */}
-                <div className="absolute top-4 left-4">
-                  <span className="px-3 py-1 rounded-full bg-white/95 backdrop-blur-md text-brand-navy text-[10px] font-black uppercase tracking-wider shadow-md">
-                    {project.category}
-                  </span>
-                </div>
-
                 {/* Year Top Right */}
                 {project.year && (
                   <div className="absolute top-4 right-4">
@@ -119,23 +112,23 @@ export const ProjectsSection: React.FC = () => {
           ))}
         </div>
 
-        {/* View More / View Less Toggle Button */}
+        {/* View More / View Less Toggle Button (Compact & Minimal) */}
         {hasMore && (
-          <div className="mt-12 flex justify-center">
+          <div className="mt-8 sm:mt-10 flex justify-center">
             <button
               type="button"
               onClick={toggleShowAll}
-              className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-full bg-white border-2 border-brand-navy text-brand-navy hover:bg-brand-navy hover:text-white transition-all duration-300 text-xs sm:text-sm font-bold uppercase tracking-wider shadow-sm hover:shadow-md active:scale-95 group"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-slate-300 hover:border-brand-navy text-brand-navy hover:bg-brand-navy hover:text-white transition-all duration-200 text-xs font-semibold shadow-xs hover:shadow-sm active:scale-95 group"
             >
               <span>
                 {showAll
-                  ? 'View Less Projects'
-                  : `View More Projects (${PROJECTS_DATA.length - INITIAL_VISIBLE_COUNT} more)`}
+                  ? 'View Less'
+                  : `View More Projects (${PROJECTS_DATA.length - INITIAL_VISIBLE_COUNT})`}
               </span>
               {showAll ? (
-                <ChevronUp className="w-4 h-4 group-hover:-translate-y-0.5 transition-transform" />
+                <ChevronUp className="w-3.5 h-3.5 group-hover:-translate-y-0.5 transition-transform" />
               ) : (
-                <ChevronDown className="w-4 h-4 group-hover:translate-y-0.5 transition-transform" />
+                <ChevronDown className="w-3.5 h-3.5 group-hover:translate-y-0.5 transition-transform" />
               )}
             </button>
           </div>
