@@ -51,45 +51,6 @@ export const AboutSection: React.FC = () => {
               </div>
             </div>
 
-            {/* Core Practice Areas */}
-            <div className="pt-1">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 font-mono mb-3">
-                Key Engineering Focus
-              </h4>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                {[
-                  'Multi-Story RCC & High-Rise Framing',
-                  'Industrial Steel & PEB Spatial Structures',
-                  'Deep Foundations, Piles & Rafts',
-                  'Structural Health Audits & Stability Checks',
-                ].map((item, idx) => (
-                  <div
-                    key={idx}
-                    className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-50 border border-slate-200/80 text-xs sm:text-sm font-medium text-slate-800"
-                  >
-                    <CheckCircle2 className="w-4 h-4 text-slate-700 shrink-0" />
-                    <span>{item}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Design Standards */}
-            <div className="pt-1 flex flex-wrap items-center gap-2 text-xs">
-              <span className="font-mono text-slate-500 font-semibold">Design Standards:</span>
-              <span className="px-2.5 py-1 rounded-md bg-slate-100 border border-slate-200 text-slate-800 font-mono font-bold">
-                IS 456 (RCC)
-              </span>
-              <span className="px-2.5 py-1 rounded-md bg-slate-100 border border-slate-200 text-slate-800 font-mono font-bold">
-                IS 800 (Steel)
-              </span>
-              <span className="px-2.5 py-1 rounded-md bg-slate-100 border border-slate-200 text-slate-800 font-mono font-bold">
-                IS 1893 (Seismic)
-              </span>
-              <span className="px-2.5 py-1 rounded-md bg-slate-100 border border-slate-200 text-slate-800 font-mono font-bold">
-                ACI 318
-              </span>
-            </div>
 
             {/* Awards & Recognition Strip */}
             <div className="pt-2">
