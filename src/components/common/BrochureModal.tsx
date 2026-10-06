@@ -1,5 +1,6 @@
 import React from 'react';
 import { X, FileText, Download, Printer, CheckCircle, ExternalLink } from 'lucide-react';
+import { assetUrl } from '@/lib/assets';
 
 interface BrochureModalProps {
   isOpen: boolean;
@@ -12,7 +13,7 @@ export const BrochureModal: React.FC<BrochureModalProps> = ({ isOpen, onClose })
   const handleDownload = () => {
     // Download the authentic, beautifully formatted multi-page Corporate Profile PDF
     const link = document.createElement('a');
-    link.href = '/Jithesh_Engineers_Corporate_Profile.pdf';
+    link.href = assetUrl('/Jithesh_Engineers_Corporate_Profile.pdf');
     link.download = 'Jithesh_Engineers_Corporate_Profile.pdf';
     document.body.appendChild(link);
     link.click();
@@ -21,7 +22,7 @@ export const BrochureModal: React.FC<BrochureModalProps> = ({ isOpen, onClose })
 
   const handleViewPrint = () => {
     // Open the high-resolution printable profile in a new tab for instant viewing / printing
-    window.open('/corporate-profile-print.html', '_blank');
+    window.open(assetUrl('/corporate-profile-print.html'), '_blank');
   };
 
   return (
@@ -120,7 +121,7 @@ export const BrochureModal: React.FC<BrochureModalProps> = ({ isOpen, onClose })
           <div className="p-3.5 sm:p-4 rounded-xl bg-slate-50 border border-slate-200/90 flex items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <img
-                src="/real-assets/director.jpg"
+                src={assetUrl('/real-assets/director.jpg')}
                 alt="Er. K. Jithesh"
                 className="w-12 h-14 rounded-lg object-cover object-top border border-slate-200 shrink-0"
                 loading="lazy"

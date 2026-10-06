@@ -1,6 +1,7 @@
 import React from 'react';
 import { CLIENTS_DATA } from '@/data/clients';
 import { Container } from '@/components/common/Container';
+import { assetUrl } from '@/lib/assets';
 
 export const ClientsSection: React.FC = () => {
   // Split clients into two rows for dynamic dual-direction marquee
@@ -39,7 +40,7 @@ export const ClientsSection: React.FC = () => {
                 title={`${client.name} — ${client.category}`}
               >
                 <img
-                  src={client.logo}
+                  src={assetUrl(client.logo)}
                   alt={client.name}
                   className="max-h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
                   loading="lazy"
@@ -60,7 +61,7 @@ export const ClientsSection: React.FC = () => {
                 title={`${client.name} — ${client.category}`}
               >
                 <img
-                  src={client.logo}
+                  src={assetUrl(client.logo)}
                   alt={client.name}
                   className="max-h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
                   loading="lazy"

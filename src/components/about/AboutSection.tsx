@@ -3,10 +3,11 @@ import { Container } from '@/components/common/Container';
 import { COMPANY_INFO } from '@/data/navigation';
 import { CheckCircle2, Award, Shield, ArrowRight, Quote, X, ExternalLink, FileDown } from 'lucide-react';
 import { scrollToSection } from '@/hooks/useScrollSpy';
+import { assetUrl } from '@/lib/assets';
 
-const FOUNDER_PHOTO = '/real-assets/director.jpg';
-const CERTIFICATE_IMAGE = '/real-assets/certificate_02.jpg';
-const PAPER_CUT_IMAGE = '/real-assets/paper_cut_01.jpg';
+const FOUNDER_PHOTO = assetUrl('/real-assets/director.jpg');
+const CERTIFICATE_IMAGE = assetUrl('/real-assets/certificate_02.jpg');
+const PAPER_CUT_IMAGE = assetUrl('/real-assets/paper_cut_01.jpg');
 
 export const AboutSection: React.FC = () => {
   const [activeAwardModal, setActiveAwardModal] = useState<{ title: string; image: string } | null>(null);

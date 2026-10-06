@@ -1,4 +1,5 @@
 import React from 'react';
+import { assetUrl } from '@/lib/assets';
 
 export interface LogoProps {
   /**
@@ -23,7 +24,7 @@ export const Logo: React.FC<LogoProps> = ({
   // Determine image source based on variant / nav state:
   // When isDarkNav is true (navbar scrolled on white background) -> use logo-transparent (black text)
   // When isDarkNav is false (transparent navbar over dark hero) -> use logo-white (white text)
-  const src =
+  const rawSrc =
     variant === 'dark'
       ? '/logo-white.png'
       : variant === 'light'
@@ -31,6 +32,8 @@ export const Logo: React.FC<LogoProps> = ({
       : isDarkNav
       ? '/logo-transparent.png'
       : '/logo-white.png';
+
+  const src = assetUrl(rawSrc);
 
   const content = (
     <img
