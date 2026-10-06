@@ -21,7 +21,7 @@ interface HeroSlide {
 const HERO_SLIDES: HeroSlide[] = [
   {
     id: 1,
-    bg: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1800&q=85&auto=format&fit=crop',
+    bg: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1600&auto=format&fit=crop&q=80',
     badge: 'Structural Engineering Consultancy • Est. 2008',
     headlinePrefix: 'Engineering Structures for a',
     headlineHighlight: 'Better Tomorrow.',
@@ -30,12 +30,12 @@ const HERO_SLIDES: HeroSlide[] = [
       tag: 'Featured Project',
       title: 'Pentium Eternia',
       location: 'Karaparamba, Kozhikode',
-      thumb: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=300&q=80&auto=format&fit=crop',
+      thumb: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=240&auto=format&fit=crop&q=75',
     },
   },
   {
     id: 2,
-    bg: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=1800&q=85&auto=format&fit=crop',
+    bg: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=1600&auto=format&fit=crop&q=80',
     badge: 'Structural Design & Detailing',
     headlinePrefix: 'Precision & Technical Rigor in',
     headlineHighlight: 'Every Blueprint.',
@@ -44,12 +44,12 @@ const HERO_SLIDES: HeroSlide[] = [
       tag: 'Commercial Landmark',
       title: 'Business Complex',
       location: 'Kozhikode, Kerala',
-      thumb: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=300&q=80&auto=format&fit=crop',
+      thumb: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=240&auto=format&fit=crop&q=75',
     },
   },
   {
     id: 3,
-    bg: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=1800&q=85&auto=format&fit=crop',
+    bg: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=1600&auto=format&fit=crop&q=80',
     badge: 'International Reach • India & Saudi Arabia',
     headlinePrefix: 'Built with Integrity.',
     headlineHighlight: 'Trusted Regionally.',
@@ -58,7 +58,7 @@ const HERO_SLIDES: HeroSlide[] = [
       tag: 'Specialized Structure',
       title: 'Space Frame Canopy',
       location: 'Riyadh, Saudi Arabia',
-      thumb: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?w=300&q=80&auto=format&fit=crop',
+      thumb: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?w=240&auto=format&fit=crop&q=75',
     },
   },
 ];
@@ -67,6 +67,17 @@ export const HeroSection: React.FC = () => {
   const [current, setCurrent] = useState(0);
   const [animating, setAnimating] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Preload secondary slides in idle time
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      HERO_SLIDES.slice(1).forEach((s) => {
+        const img = new Image();
+        img.src = s.bg;
+      });
+    }, 1200);
+    return () => clearTimeout(timer);
+  }, []);
 
   const goTo = (idx: number) => {
     if (animating) return;
@@ -91,12 +102,16 @@ export const HeroSection: React.FC = () => {
 
   return (
     <section id="home" className="relative w-full min-h-[680px] h-[100vh] max-h-[960px] overflow-hidden bg-slate-950 text-white flex flex-col justify-between">
-      {/* Background Architectural Image */}
-      <div
-        className={`absolute inset-0 bg-cover bg-center transition-all duration-1000 transform ${
+      {/* High-priority Architectural Hero Image */}
+      <img
+        src={slide.bg}
+        alt={`${slide.headlinePrefix} ${slide.headlineHighlight}`}
+        className={`absolute inset-0 w-full h-full object-cover transition-all duration-1000 transform ${
           animating ? 'opacity-30 scale-102' : 'opacity-75 scale-100'
         }`}
-        style={{ backgroundImage: `url('${slide.bg}')` }}
+        fetchPriority={current === 0 ? 'high' : 'auto'}
+        loading={current === 0 ? 'eager' : 'lazy'}
+        decoding={current === 0 ? 'sync' : 'async'}
       />
 
       {/* Clean Architectural Vignette & Dark Overlay (No fake color blurs) */}

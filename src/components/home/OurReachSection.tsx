@@ -10,10 +10,11 @@ export const OurReachSection: React.FC = () => {
         {/* Wide Architectural Construction Photo Banner (ON TOP) */}
         <div className="relative rounded-2xl overflow-hidden aspect-[21/9] min-h-[260px] sm:min-h-[300px] shadow-lg group mb-8 sm:mb-10">
           <img
-            src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=1600&q=80&auto=format&fit=crop"
+            src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=1200&q=75&auto=format&fit=crop"
             alt="Cross-Border Engineering Excellence"
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
             loading="lazy"
+            decoding="async"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-950/65 to-black/25 flex items-center p-8 sm:p-12">
             <div className="max-w-2xl text-white space-y-3">

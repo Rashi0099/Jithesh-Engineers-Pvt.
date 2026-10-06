@@ -105,6 +105,8 @@ export const AboutSection: React.FC = () => {
                     src={CERTIFICATE_IMAGE}
                     alt="Fastest Growing Indian Company Excellence Award"
                     className="w-12 h-12 rounded-lg object-cover border border-slate-200 shrink-0 group-hover:scale-105 transition-transform"
+                    loading="lazy"
+                    decoding="async"
                   />
                   <div className="min-w-0">
                     <span className="text-[10px] font-mono uppercase text-slate-400 font-semibold block">IAC Excellence Award</span>
@@ -125,6 +127,8 @@ export const AboutSection: React.FC = () => {
                     src={PAPER_CUT_IMAGE}
                     alt="SiliconIndia 10 Most Promising Engineering Consultants"
                     className="w-12 h-12 rounded-lg object-cover border border-slate-200 shrink-0 group-hover:scale-105 transition-transform"
+                    loading="lazy"
+                    decoding="async"
                   />
                   <div className="min-w-0">
                     <span className="text-[10px] font-mono uppercase text-slate-400 font-semibold block">SiliconIndia Feature</span>
@@ -149,6 +153,7 @@ export const AboutSection: React.FC = () => {
                   alt="Er. K. Jithesh - Managing Director & Chief Structural Engineer"
                   className="w-full h-full object-cover object-top group-hover:scale-103 transition-transform duration-500"
                   loading="lazy"
+                  decoding="async"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/25 to-transparent" />
                 
@@ -251,6 +256,8 @@ export const AboutSection: React.FC = () => {
                 src={activeAwardModal.image}
                 alt={activeAwardModal.title}
                 className="max-h-[70vh] w-auto object-contain"
+                loading="lazy"
+                decoding="async"
               />
             </div>
           </div>

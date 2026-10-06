@@ -69,7 +69,8 @@ export const ServicesSection: React.FC = () => {
                 src={activeService.image}
                 alt={activeService.title}
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                loading="eager"
+                loading="lazy"
+                decoding="async"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/30 to-black/20" />
 
@@ -159,6 +160,7 @@ export const ServicesSection: React.FC = () => {
                   alt={service.title}
                   className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   loading="lazy"
+                  decoding="async"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-transparent" />
 

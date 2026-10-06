@@ -123,6 +123,8 @@ export const BrochureModal: React.FC<BrochureModalProps> = ({ isOpen, onClose })
                 src="/real-assets/director.jpg"
                 alt="Er. K. Jithesh"
                 className="w-12 h-14 rounded-lg object-cover object-top border border-slate-200 shrink-0"
+                loading="lazy"
+                decoding="async"
               />
               <div>
                 <div className="text-[10px] font-mono uppercase tracking-wider text-slate-500 font-semibold">

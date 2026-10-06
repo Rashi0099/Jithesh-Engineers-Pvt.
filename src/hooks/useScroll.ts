@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 interface ScrollState {
   scrollY: number;
@@ -7,7 +7,8 @@ interface ScrollState {
 }
 
 /**
- * Custom hook to track window scroll position and direction
+ * Custom hook to track window scroll position and direction with high performance.
+ * Utilizes requestAnimationFrame and selective state dispatch to eliminate re-render thrashing.
  * @param threshold Pixel threshold to toggle `isScrolled` (default: 40)
  */
 export function useScroll(threshold = 40): ScrollState {
@@ -17,21 +18,42 @@ export function useScroll(threshold = 40): ScrollState {
     isScrolled: false,
   });
 
+  const stateRef = useRef(scrollState);
+  stateRef.current = scrollState;
+
   useEffect(() => {
     let lastScrollY = window.scrollY;
+    let ticking = false;
 
-    const handleScroll = () => {
+    const updateScroll = () => {
       const currentScrollY = window.scrollY;
-      const direction = currentScrollY > lastScrollY ? 'down' : 'up';
+      const direction: 'up' | 'down' | null =
+        currentScrollY > lastScrollY ? 'down' : currentScrollY < lastScrollY ? 'up' : null;
       const scrolled = currentScrollY > threshold;
 
-      setScrollState({
-        scrollY: currentScrollY,
-        scrollDirection: currentScrollY === lastScrollY ? null : direction,
-        isScrolled: scrolled,
-      });
+      const prev = stateRef.current;
+      // Only set state if scrolled threshold flipped or direction changed or scroll position changed noticeably
+      if (
+        prev.isScrolled !== scrolled ||
+        (direction && prev.scrollDirection !== direction) ||
+        Math.abs(prev.scrollY - currentScrollY) >= 40
+      ) {
+        setScrollState({
+          scrollY: currentScrollY,
+          scrollDirection: direction,
+          isScrolled: scrolled,
+        });
+      }
 
       lastScrollY = currentScrollY;
+      ticking = false;
+    };
+
+    const handleScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(updateScroll);
+      }
     };
 
     // Initialize state
@@ -43,3 +65,4 @@ export function useScroll(threshold = 40): ScrollState {
 
   return scrollState;
 }
+

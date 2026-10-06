@@ -4,17 +4,17 @@ import { SERVICES_DATA } from '@/data/services';
 
 const SERVICE_IMAGES: Record<string, string> = {
   'structural-design':
-    'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=800&q=85&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=500&q=75&auto=format&fit=crop',
   'structural-detailing':
-    'https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=800&q=85&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=500&q=75&auto=format&fit=crop',
   'steel-structures':
-    'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=85&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=500&q=75&auto=format&fit=crop',
   'structural-inspection':
-    'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=800&q=85&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=500&q=75&auto=format&fit=crop',
   'retrofitting-strengthening':
-    'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=85&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=500&q=75&auto=format&fit=crop',
   'specialized-structures':
-    'https://images.unsplash.com/photo-1513694203232-719a280e022f?w=800&q=85&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1513694203232-719a280e022f?w=500&q=75&auto=format&fit=crop',
 };
 
 export const ServiceCardsRow: React.FC = () => {
@@ -36,6 +36,7 @@ export const ServiceCardsRow: React.FC = () => {
                   alt={service.title}
                   className="absolute inset-0 w-full h-full object-cover opacity-75 group-hover:opacity-95 group-hover:scale-105 transition-all duration-500"
                   loading="lazy"
+                  decoding="async"
                 />
 
                 {/* Dark Gradient Overlay for High Contrast */}
