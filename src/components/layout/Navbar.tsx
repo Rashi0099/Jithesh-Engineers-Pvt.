@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Menu, X, ArrowRight, FileDown, MessageCircle } from 'lucide-react';
 import { NAV_ITEMS, COMPANY_INFO } from '@/data/navigation';
 import { useScroll } from '@/hooks/useScroll';
@@ -14,8 +14,10 @@ const SECTION_IDS = NAV_ITEMS.map((item) => item.targetId);
 
 export const Navbar: React.FC<NavbarProps> = ({ onOpenBrochure }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [manualActive, setManualActive] = useState<string | null>(null);
+  const manualTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const { isScrolled } = useScroll(40);
-  const activeSection = useScrollSpy(SECTION_IDS, 120);
+  const activeSection = useScrollSpy(SECTION_IDS, 110);
 
   // Close mobile drawer on resize to desktop
   useEffect(() => {
@@ -28,9 +30,25 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBrochure }) => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (manualTimeoutRef.current) {
+        clearTimeout(manualTimeoutRef.current);
+      }
+    };
+  }, []);
+
   const handleNavClick = (targetId: string) => {
+    setManualActive(targetId);
+    if (manualTimeoutRef.current) {
+      clearTimeout(manualTimeoutRef.current);
+    }
     scrollToSection(targetId);
     setMobileMenuOpen(false);
+    manualTimeoutRef.current = setTimeout(() => {
+      setManualActive(null);
+    }, 1300);
   };
 
   const isDarkNav = isScrolled || mobileMenuOpen;
@@ -57,13 +75,14 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBrochure }) => {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-6 lg:gap-8 xl:gap-11">
             {NAV_ITEMS.map((item) => {
-              const isActive = activeSection === item.targetId;
+              const currentActive = manualActive || activeSection;
+              const isActive = currentActive === item.targetId;
               return (
                 <button
                   key={item.targetId}
                   type="button"
                   onClick={() => handleNavClick(item.targetId)}
-                  className={`relative py-1.5 text-sm lg:text-[14.5px] font-medium tracking-wide transition-all duration-200 ${
+                  className={`relative py-1.5 text-sm lg:text-[14.5px] font-medium tracking-wide transition-colors duration-200 cursor-pointer ${
                     isActive
                       ? isDarkNav
                         ? 'text-slate-950 font-bold'
@@ -141,7 +160,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBrochure }) => {
           <div className="md:hidden mt-3 pb-5 border-t border-slate-200 pt-3 bg-white rounded-2xl shadow-2xl px-4 animate-in fade-in duration-200">
             <div className="flex flex-col space-y-1">
               {NAV_ITEMS.map((item) => {
-                const isActive = activeSection === item.targetId;
+                const currentActive = manualActive || activeSection;
+                const isActive = currentActive === item.targetId;
                 return (
                   <button
                     key={item.targetId}

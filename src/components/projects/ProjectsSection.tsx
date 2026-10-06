@@ -12,6 +12,7 @@ import {
   ArrowRight,
 } from 'lucide-react';
 import { scrollToSection } from '@/hooks/useScrollSpy';
+import { getLenis } from '@/lib/lenis';
 
 const INITIAL_VISIBLE_COUNT = 6;
 
@@ -19,16 +20,28 @@ export const ProjectsSection: React.FC = () => {
   const [showAll, setShowAll] = useState<boolean>(false);
   const [activeModalProject, setActiveModalProject] = useState<ProjectItem | null>(null);
 
-  // Close modal on Escape key
+  // Close modal on Escape key & Lock background scroll
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setActiveModalProject(null);
       }
     };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
+
+    if (activeModalProject) {
+      window.addEventListener('keydown', handleKeyDown);
+      const lenis = getLenis();
+      lenis?.stop();
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+
+      return () => {
+        window.removeEventListener('keydown', handleKeyDown);
+        lenis?.start();
+        document.body.style.overflow = originalOverflow;
+      };
+    }
+  }, [activeModalProject]);
 
   const visibleProjects = showAll
     ? PROJECTS_DATA
@@ -137,25 +150,27 @@ export const ProjectsSection: React.FC = () => {
         {/* ─── INTERACTIVE PHOTO LIGHTBOX MODAL ────────────────────────────── */}
         {activeModalProject && (
           <div
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200"
+            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200 select-none"
             onClick={() => setActiveModalProject(null)}
+            data-lenis-prevent
           >
             <div
-              className="relative w-full max-w-3xl bg-white rounded-3xl overflow-hidden shadow-2xl border border-slate-200 animate-in zoom-in-95 duration-200"
+              className="relative w-full max-w-xl lg:max-w-2xl max-h-[88vh] sm:max-h-[84vh] flex flex-col bg-white rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border border-slate-200 animate-in zoom-in-95 duration-200"
               onClick={(e) => e.stopPropagation()}
+              data-lenis-prevent
             >
               {/* Close Button */}
               <button
                 type="button"
                 onClick={() => setActiveModalProject(null)}
-                className="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center transition-colors"
+                className="absolute top-3.5 right-3.5 z-30 w-8 h-8 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center transition-all backdrop-blur-md shadow-md hover:scale-105 active:scale-95"
                 aria-label="Close modal"
               >
-                <X className="w-5 h-5" />
+                <X className="w-4 h-4" />
               </button>
 
-              {/* Large Image Showcase */}
-              <div className="relative aspect-[16/10] w-full bg-slate-950">
+              {/* Compact Cinematic Image Header */}
+              <div className="relative h-44 sm:h-52 md:h-56 shrink-0 w-full bg-slate-950 overflow-hidden">
                 <img
                   src={activeModalProject.image}
                   alt={activeModalProject.title}
@@ -163,22 +178,22 @@ export const ProjectsSection: React.FC = () => {
                   loading="lazy"
                   decoding="async"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30" />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/40 to-black/20" />
 
-                <div className="absolute bottom-5 left-6 right-6 text-white">
-                  <span className="text-[11px] font-bold uppercase tracking-widest text-blue-300">
+                <div className="absolute bottom-3 sm:bottom-4 left-4 sm:left-6 right-4 sm:right-6 text-white">
+                  <span className="text-[10px] sm:text-[11px] font-mono font-bold uppercase tracking-wider text-blue-300">
                     {activeModalProject.category}
                   </span>
-                  <h3 className="text-2xl sm:text-3xl font-black text-white mt-1">
+                  <h3 className="text-lg sm:text-2xl font-black text-white mt-0.5 leading-tight">
                     {activeModalProject.title}
                   </h3>
-                  <div className="flex items-center gap-2 text-xs text-slate-300 mt-1">
-                    <MapPin className="w-3.5 h-3.5 text-brand-accent" />
+                  <div className="flex items-center gap-2 text-[11px] sm:text-xs text-slate-300 mt-1">
+                    <MapPin className="w-3.5 h-3.5 text-brand-accent shrink-0" />
                     <span>{activeModalProject.location}</span>
                     {activeModalProject.year && (
                       <>
-                        <span>•</span>
-                        <Calendar className="w-3.5 h-3.5 text-brand-accent" />
+                        <span className="text-slate-500">•</span>
+                        <Calendar className="w-3.5 h-3.5 text-brand-accent shrink-0" />
                         <span>{activeModalProject.year}</span>
                       </>
                     )}
@@ -186,16 +201,21 @@ export const ProjectsSection: React.FC = () => {
                 </div>
               </div>
 
-              {/* Modal Body Info */}
-              <div className="p-6 sm:p-8 space-y-6">
+              {/* Scrollable Modal Body Info */}
+              <div
+                className="overflow-y-auto overscroll-contain p-4 sm:p-5 space-y-3.5 sm:space-y-4"
+                data-lenis-prevent
+              >
                 {activeModalProject.scope && (
-                  <div className="p-4 rounded-xl bg-brand-light border border-slate-200 flex items-start gap-3">
-                    <Layers className="w-5 h-5 text-brand-accent shrink-0 mt-0.5" />
+                  <div className="p-3 sm:p-3.5 rounded-xl bg-slate-50 border border-slate-200/90 flex items-start gap-3">
+                    <div className="w-7 h-7 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center text-brand-navy shrink-0 mt-0.5">
+                      <Layers className="w-4 h-4 text-brand-accent" />
+                    </div>
                     <div>
-                      <span className="text-xs font-bold uppercase tracking-wider text-brand-navy block">
+                      <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-brand-navy block">
                         Structural Engineering Scope
                       </span>
-                      <p className="text-sm font-semibold text-slate-800 mt-0.5">
+                      <p className="text-xs sm:text-sm font-semibold text-slate-800 mt-0.5">
                         {activeModalProject.scope}
                       </p>
                     </div>
@@ -203,16 +223,16 @@ export const ProjectsSection: React.FC = () => {
                 )}
 
                 <div>
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">
+                  <h4 className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-500 mb-1">
                     Project Overview
                   </h4>
-                  <p className="text-sm text-slate-700 leading-relaxed">
+                  <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
                     {activeModalProject.description}
                   </p>
                 </div>
 
-                <div className="pt-2 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
-                  <div className="text-xs text-slate-500 font-mono">
+                <div className="pt-3 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3">
+                  <div className="text-[11px] text-slate-500 font-mono text-center sm:text-left">
                     IS & International Structural Standards Compliant
                   </div>
                   <button
@@ -221,7 +241,7 @@ export const ProjectsSection: React.FC = () => {
                       setActiveModalProject(null);
                       scrollToSection('contact');
                     }}
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-brand-navy text-white text-xs font-bold uppercase tracking-wider hover:bg-brand-blue transition-colors shadow-sm active:scale-95"
+                    className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-2 sm:py-2.5 rounded-xl bg-brand-navy hover:bg-brand-blue text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm active:scale-95"
                   >
                     <span>Inquire for Similar Project</span>
                     <ArrowRight className="w-3.5 h-3.5" />

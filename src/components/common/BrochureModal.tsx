@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { X, FileText, Download, ExternalLink, CheckCircle2 } from 'lucide-react';
 import { assetUrl } from '@/lib/assets';
+import { getLenis } from '@/lib/lenis';
 
 interface BrochureModalProps {
   isOpen: boolean;
@@ -8,15 +9,25 @@ interface BrochureModalProps {
 }
 
 export const BrochureModal: React.FC<BrochureModalProps> = ({ isOpen, onClose }) => {
-  // Close on Escape key
+  // Close on Escape key & Lock background scroll
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
     };
+
     if (isOpen) {
       window.addEventListener('keydown', handleKeyDown);
+      const lenis = getLenis();
+      lenis?.stop();
+      const prevOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+
+      return () => {
+        window.removeEventListener('keydown', handleKeyDown);
+        lenis?.start();
+        document.body.style.overflow = prevOverflow;
+      };
     }
-    return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
@@ -38,10 +49,12 @@ export const BrochureModal: React.FC<BrochureModalProps> = ({ isOpen, onClose })
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-slate-950/75 backdrop-blur-sm animate-in fade-in duration-200 select-none"
       onClick={onClose}
+      data-lenis-prevent
     >
       <div
         className="relative w-full max-w-md bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-slate-200 overflow-hidden animate-in zoom-in-95 duration-200"
         onClick={(e) => e.stopPropagation()}
+        data-lenis-prevent
       >
         {/* Modal Header */}
         <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between">

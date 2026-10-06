@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container } from '@/components/common/Container';
 import { COMPANY_INFO } from '@/data/navigation';
 import { CheckCircle2, Award, Shield, ArrowRight, Quote, X, ExternalLink, FileDown } from 'lucide-react';
 import { scrollToSection } from '@/hooks/useScrollSpy';
 import { assetUrl } from '@/lib/assets';
+import { getLenis } from '@/lib/lenis';
 
 const FOUNDER_PHOTO = assetUrl('/real-assets/director.jpg');
 const CERTIFICATE_IMAGE = assetUrl('/real-assets/certificate_02.jpg');
@@ -11,6 +12,27 @@ const PAPER_CUT_IMAGE = assetUrl('/real-assets/paper_cut_01.jpg');
 
 export const AboutSection: React.FC = () => {
   const [activeAwardModal, setActiveAwardModal] = useState<{ title: string; image: string } | null>(null);
+
+  // Close modal on Escape key & Lock background scroll
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setActiveAwardModal(null);
+    };
+
+    if (activeAwardModal) {
+      window.addEventListener('keydown', handleKeyDown);
+      const lenis = getLenis();
+      lenis?.stop();
+      const prevOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+
+      return () => {
+        window.removeEventListener('keydown', handleKeyDown);
+        lenis?.start();
+        document.body.style.overflow = prevOverflow;
+      };
+    }
+  }, [activeAwardModal]);
 
   return (
     <section id="about" className="py-16 sm:py-20 bg-white relative">
@@ -195,10 +217,12 @@ export const AboutSection: React.FC = () => {
         <div
           className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4"
           onClick={() => setActiveAwardModal(null)}
+          data-lenis-prevent
         >
           <div
             className="bg-white rounded-2xl max-w-2xl w-full p-4 sm:p-6 shadow-2xl relative animate-in fade-in zoom-in-95 duration-200"
             onClick={(e) => e.stopPropagation()}
+            data-lenis-prevent
           >
             <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-200">
               <h4 className="text-sm sm:text-base font-bold text-slate-900 truncate pr-4">

@@ -6,65 +6,54 @@ const STATS = [
   {
     icon: Award,
     value: '18+',
-    unit: 'Years',
-    label: 'Consultancy Practice',
-    detail: 'Continuous engineering excellence since inception',
+    label: 'Years of Practice',
   },
   {
     icon: Globe2,
     value: 'Multiple States',
-    unit: 'Reach',
     label: 'India & Saudi Arabia',
-    detail: 'Kerala, Pan-India & Middle East sites',
   },
   {
     icon: Calendar,
     value: '2008',
-    unit: 'Est.',
     label: 'Year Established',
-    detail: 'Founded by Er. K. Jithesh in Calicut',
   },
   {
     icon: ShieldCheck,
     value: '100+ Projects',
-    unit: 'Delivered',
     label: 'Trusted by Builders',
-    detail: 'Landmark, Pentium, KHRWS & more',
   },
 ];
 
 export const StatsBar: React.FC = () => {
   return (
-    <section className="bg-white border-y border-slate-200/80 relative z-20">
+    <section className="hidden md:block relative z-30 -mt-28 lg:-mt-32">
       <Container size="xl">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-px bg-slate-200/80">
-          {STATS.map(({ icon: Icon, value, unit, label, detail }) => (
-            <div
-              key={label}
-              className="bg-white group p-3.5 sm:p-6 lg:p-7 hover:bg-slate-50/80 transition-all duration-300 flex flex-col justify-between"
-            >
-              <div className="flex items-center justify-between mb-2 sm:mb-3">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-slate-100 border border-slate-200/80 flex items-center justify-center text-slate-800 group-hover:bg-slate-900 group-hover:text-white transition-colors duration-300 shadow-sm">
-                  <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+        {/* Floating Pure Architectural Glass Card - Refined, Small & Proper */}
+        <div className="pure-glass-card max-w-5xl mx-auto rounded-2xl py-2.5 sm:py-3 px-4 sm:px-6 lg:px-8 text-white">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 divide-y sm:divide-y-0 lg:divide-x divide-white/10">
+            {STATS.map(({ icon: Icon, value, label }) => (
+              <div
+                key={label}
+                className="flex items-center gap-2.5 sm:gap-3 pt-2 sm:pt-0 first:pt-0 sm:px-2 lg:px-4 first:pl-0 last:pr-0 group"
+              >
+                {/* Pure Glass Capsule Icon Box - Compact & Monochrome */}
+                <div className="w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-lg bg-white/10 border border-white/20 backdrop-blur-md flex items-center justify-center text-white shrink-0 shadow-inner group-hover:scale-105 group-hover:bg-white/20 transition-all">
+                  <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" strokeWidth={1.75} />
                 </div>
-                <span className="text-[9px] sm:text-[10px] font-mono font-semibold uppercase tracking-wider text-slate-400 group-hover:text-slate-600 transition-colors">
-                  {unit}
-                </span>
-              </div>
 
-              <div>
-                <div className="text-base sm:text-xl lg:text-2xl font-extrabold text-slate-900 tracking-tight leading-tight">
-                  {value}
-                </div>
-                <div className="text-[11px] sm:text-xs font-semibold text-slate-700 mt-0.5 sm:mt-1 truncate sm:whitespace-normal">
-                  {label}
-                </div>
-                <div className="text-[10px] sm:text-[11px] text-slate-500 mt-0.5 leading-snug line-clamp-2 sm:line-clamp-none">
-                  {detail}
+                {/* Pure 2-Line Typography - Crisp & Compact */}
+                <div className="min-w-0 flex-1">
+                  <div className="text-sm sm:text-base font-extrabold text-white tracking-tight leading-tight drop-shadow-xs">
+                    {value}
+                  </div>
+                  <div className="text-[11px] sm:text-xs font-medium text-slate-300 leading-none mt-0.5 truncate">
+                    {label}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </Container>
     </section>

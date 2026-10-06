@@ -43,7 +43,7 @@ export function getLenis(): Lenis | null {
 /**
  * Smooth scroll to target element or selector with custom offset
  */
-export function smoothScrollTo(target: string | HTMLElement, offset = -80): void {
+export function smoothScrollTo(target: string | HTMLElement | number, offset = 0): void {
   if (lenisInstance) {
     lenisInstance.scrollTo(target, {
       offset,
@@ -51,14 +51,20 @@ export function smoothScrollTo(target: string | HTMLElement, offset = -80): void
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
     });
   } else if (typeof window !== 'undefined') {
-    if (typeof target === 'string') {
+    if (typeof target === 'number') {
+      window.scrollTo({ top: target, behavior: 'smooth' });
+    } else if (typeof target === 'string') {
       const el = document.querySelector(target.startsWith('#') ? target : '#' + target);
       if (el) {
-        const top = el.getBoundingClientRect().top + window.pageYOffset + offset;
+        const style = window.getComputedStyle(el);
+        const sm = parseFloat(style.scrollMarginTop) || 88;
+        const top = el.getBoundingClientRect().top + window.pageYOffset - sm + offset;
         window.scrollTo({ top, behavior: 'smooth' });
       }
     } else if (target instanceof HTMLElement) {
-      const top = target.getBoundingClientRect().top + window.pageYOffset + offset;
+      const style = window.getComputedStyle(target);
+      const sm = parseFloat(style.scrollMarginTop) || 88;
+      const top = target.getBoundingClientRect().top + window.pageYOffset - sm + offset;
       window.scrollTo({ top, behavior: 'smooth' });
     }
   }
