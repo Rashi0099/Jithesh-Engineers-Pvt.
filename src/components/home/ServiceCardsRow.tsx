@@ -78,21 +78,23 @@ export const ServiceCardsRow: React.FC = () => {
     });
   }, []);
 
-  // Smoothly animate to target card index with graceful, slow cinematic ease
+  // Smoothly animate to target card index with fast, snappy response on mobile
   const goToCard = useCallback((targetIdx: number) => {
     const clamped = Math.max(0, Math.min(TOTAL_CARDS - 1, targetIdx));
     targetPosRef.current = clamped;
     setActiveInt(clamped);
 
+    const isMob = typeof window !== 'undefined' && window.innerWidth < 768;
+
     gsap.killTweensOf(animPosRef.current);
     gsap.to(animPosRef.current, {
       pos: clamped,
-      duration: 1.4,
+      duration: isMob ? 0.35 : 0.65,
       ease: 'power2.out',
       onUpdate: () => {
         const p = animPosRef.current.pos;
         setActiveIndexFloat(p);
-        applyCardTransforms(p, window.innerWidth < 768);
+        applyCardTransforms(p, isMob);
       },
     });
   }, [applyCardTransforms]);
@@ -150,8 +152,9 @@ export const ServiceCardsRow: React.FC = () => {
       }, 300);
     };
 
-    // Live pointer / touch drag tracking
+    // Live pointer / touch drag tracking (fast & snappy on mobile)
     let startX = 0;
+    let startTime = 0;
     let isDragging = false;
     let dragDistance = 0;
 
@@ -159,6 +162,7 @@ export const ServiceCardsRow: React.FC = () => {
       // Don't drag if clicking buttons or links
       if ((e.target as HTMLElement).closest('button, a')) return;
       startX = e.clientX;
+      startTime = Date.now();
       isDragging = true;
       dragDistance = 0;
     };
@@ -166,20 +170,26 @@ export const ServiceCardsRow: React.FC = () => {
     const onPointerMove = (e: PointerEvent) => {
       if (!isDragging) return;
       dragDistance = e.clientX - startX;
-      // Live interactive resistance while dragging
-      const liveOffset = targetPosRef.current - dragDistance / 260;
+      const isMob = window.innerWidth < 768;
+      // Live interactive resistance (1:1 tracking on mobile for fast response)
+      const divisor = isMob ? 170 : 230;
+      const liveOffset = targetPosRef.current - dragDistance / divisor;
       const clampedLive = Math.max(0, Math.min(TOTAL_CARDS - 1, liveOffset));
       setActiveIndexFloat(clampedLive);
-      applyCardTransforms(clampedLive, window.innerWidth < 768);
+      applyCardTransforms(clampedLive, isMob);
     };
 
     const onPointerUp = () => {
       if (!isDragging) return;
       isDragging = false;
 
-      if (dragDistance < -35) {
+      const elapsed = Math.max(1, Date.now() - startTime);
+      const velocity = Math.abs(dragDistance) / elapsed;
+      const threshold = velocity > 0.22 ? 18 : 28;
+
+      if (dragDistance < -threshold) {
         goToCard(targetPosRef.current + 1);
-      } else if (dragDistance > 35) {
+      } else if (dragDistance > threshold) {
         goToCard(targetPosRef.current - 1);
       } else {
         goToCard(targetPosRef.current);
@@ -241,7 +251,7 @@ export const ServiceCardsRow: React.FC = () => {
           </div>
 
           {/* Interactive Carousel Stage */}
-          <div className="relative flex items-center justify-center py-2 select-none">
+          <div className="relative flex items-center justify-center py-2 select-none touch-pan-y">
             {/* Previous Arrow Button */}
             <button
               type="button"

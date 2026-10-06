@@ -37,11 +37,11 @@ export const HeroSection: React.FC = () => {
             </h1>
 
             {/* Two Action Buttons side by side on mobile */}
-            <div className="grid grid-cols-2 gap-3 max-w-[340px] sm:max-w-sm md:flex md:items-center md:gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
               <button
                 type="button"
                 onClick={() => scrollToSection('projects')}
-                className="inline-flex items-center justify-center gap-1.5 px-4 sm:px-6 py-3.5 bg-white text-slate-950 hover:bg-slate-100 font-bold text-xs sm:text-sm rounded-xl transition-all shadow-md active:scale-95 group cursor-pointer"
+                className="inline-flex items-center justify-center gap-1.5 px-3.5 sm:px-6 h-9 sm:h-auto sm:py-3.5 bg-white text-slate-950 hover:bg-slate-100 font-bold text-xs sm:text-sm rounded-lg sm:rounded-xl transition-all shadow-md active:scale-95 group cursor-pointer whitespace-nowrap"
               >
                 <span>Explore Projects</span>
                 <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
@@ -50,7 +50,7 @@ export const HeroSection: React.FC = () => {
               <button
                 type="button"
                 onClick={() => scrollToSection('about')}
-                className="inline-flex items-center justify-center px-4 sm:px-5 py-3.5 bg-white/15 hover:bg-white/20 backdrop-blur-md border border-white/25 rounded-xl text-white font-medium text-xs sm:text-sm transition-all active:scale-95 cursor-pointer"
+                className="inline-flex items-center justify-center px-3.5 sm:px-5 h-9 sm:h-auto sm:py-3.5 bg-white/15 hover:bg-white/20 backdrop-blur-md border border-white/25 rounded-lg sm:rounded-xl text-white font-medium text-xs sm:text-sm transition-all active:scale-95 cursor-pointer whitespace-nowrap"
               >
                 <span>About Firm</span>
               </button>
