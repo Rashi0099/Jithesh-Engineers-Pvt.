@@ -28,6 +28,7 @@ export const ServiceCardsRow: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const cardElementsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const draggedFarRef = useRef<boolean>(false);
 
   // Active floating index (default starts at Card 03: index 2)
   const [activeIndexFloat, setActiveIndexFloat] = useState(START_INDEX);
@@ -78,18 +79,19 @@ export const ServiceCardsRow: React.FC = () => {
     });
   }, []);
 
-  // Smoothly animate to target card index with fast, snappy response on mobile
-  const goToCard = useCallback((targetIdx: number) => {
+  // Smoothly animate to target card index with ultra-fast, snappy response
+  const goToCard = useCallback((targetIdx: number, customDuration?: number) => {
     const clamped = Math.max(0, Math.min(TOTAL_CARDS - 1, targetIdx));
     targetPosRef.current = clamped;
     setActiveInt(clamped);
 
     const isMob = typeof window !== 'undefined' && window.innerWidth < 768;
+    const dur = customDuration !== undefined ? customDuration : (isMob ? 0.22 : 0.45);
 
     gsap.killTweensOf(animPosRef.current);
     gsap.to(animPosRef.current, {
       pos: clamped,
-      duration: isMob ? 0.35 : 0.65,
+      duration: dur,
       ease: 'power2.out',
       onUpdate: () => {
         const p = animPosRef.current.pos;
@@ -152,81 +154,187 @@ export const ServiceCardsRow: React.FC = () => {
       }, 300);
     };
 
-    // Live pointer / touch drag tracking (fast & snappy on mobile)
-    let startX = 0;
-    let startTime = 0;
-    let isDragging = false;
-    let dragDistance = 0;
+    // Touch tracking specifically tuned for Android and iOS
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchStartTime = 0;
+    let isTouching = false;
+    let isHorizontalSwipe = false;
+    let isVerticalScroll = false;
+    let touchDragDistance = 0;
 
-    const onPointerDown = (e: PointerEvent) => {
-      // Don't drag if clicking buttons or links
-      if ((e.target as HTMLElement).closest('button, a')) return;
-      startX = e.clientX;
-      startTime = Date.now();
-      isDragging = true;
-      dragDistance = 0;
+    const onTouchStart = (e: TouchEvent) => {
+      if (e.touches.length !== 1) return;
+      if ((e.target as HTMLElement).closest('button, a, .card-yellow-btn')) return;
+
+      const touch = e.touches[0];
+      touchStartX = touch.clientX;
+      touchStartY = touch.clientY;
+      touchStartTime = Date.now();
+      isTouching = true;
+      isHorizontalSwipe = false;
+      isVerticalScroll = false;
+      touchDragDistance = 0;
+      draggedFarRef.current = false;
     };
 
-    const onPointerMove = (e: PointerEvent) => {
-      if (!isDragging) return;
-      dragDistance = e.clientX - startX;
+    const onTouchMove = (e: TouchEvent) => {
+      if (!isTouching || isVerticalScroll) return;
+      if (e.touches.length !== 1) return;
+
+      const touch = e.touches[0];
+      const dx = touch.clientX - touchStartX;
+      const dy = touch.clientY - touchStartY;
+
+      // Determine intent on first few pixels
+      if (!isHorizontalSwipe && !isVerticalScroll) {
+        if (Math.abs(dy) > 6 && Math.abs(dy) > Math.abs(dx)) {
+          isVerticalScroll = true;
+          return;
+        } else if (Math.abs(dx) > 6 && Math.abs(dx) >= Math.abs(dy)) {
+          isHorizontalSwipe = true;
+        } else {
+          return;
+        }
+      }
+
+      if (isHorizontalSwipe) {
+        if (e.cancelable) {
+          e.preventDefault();
+        }
+
+        touchDragDistance = dx;
+        if (Math.abs(dx) > 8) {
+          draggedFarRef.current = true;
+        }
+
+        const isMob = window.innerWidth < 768;
+        const stepX = isMob ? 170 : 220;
+        const liveOffset = targetPosRef.current - dx / stepX;
+        const clampedLive = Math.max(0, Math.min(TOTAL_CARDS - 1, liveOffset));
+        setActiveIndexFloat(clampedLive);
+        applyCardTransforms(clampedLive, isMob);
+      }
+    };
+
+    const onTouchEnd = () => {
+      if (!isTouching) return;
+      isTouching = false;
+
+      if (isHorizontalSwipe) {
+        const elapsed = Math.max(1, Date.now() - touchStartTime);
+        const velocity = Math.abs(touchDragDistance) / elapsed;
+        const threshold = velocity > 0.16 ? 12 : 22;
+
+        if (touchDragDistance < -threshold) {
+          goToCard(targetPosRef.current + 1, 0.22);
+        } else if (touchDragDistance > threshold) {
+          goToCard(targetPosRef.current - 1, 0.22);
+        } else {
+          goToCard(targetPosRef.current, 0.2);
+        }
+
+        setTimeout(() => {
+          draggedFarRef.current = false;
+        }, 150);
+      }
+    };
+
+    const onTouchCancel = () => {
+      if (!isTouching) return;
+      isTouching = false;
+      goToCard(targetPosRef.current, 0.2);
+      setTimeout(() => {
+        draggedFarRef.current = false;
+      }, 150);
+    };
+
+    // Desktop Mouse Drag Tracking
+    let mouseStartX = 0;
+    let mouseStartTime = 0;
+    let isMouseDragging = false;
+    let mouseDragDistance = 0;
+
+    const onMouseDown = (e: MouseEvent) => {
+      if (e.button !== 0) return;
+      if ((e.target as HTMLElement).closest('button, a, .card-yellow-btn')) return;
+      mouseStartX = e.clientX;
+      mouseStartTime = Date.now();
+      isMouseDragging = true;
+      mouseDragDistance = 0;
+      draggedFarRef.current = false;
+    };
+
+    const onMouseMove = (e: MouseEvent) => {
+      if (!isMouseDragging) return;
+      mouseDragDistance = e.clientX - mouseStartX;
+      if (Math.abs(mouseDragDistance) > 6) {
+        draggedFarRef.current = true;
+      }
       const isMob = window.innerWidth < 768;
-      // Live interactive resistance (1:1 tracking on mobile for fast response)
-      const divisor = isMob ? 170 : 230;
-      const liveOffset = targetPosRef.current - dragDistance / divisor;
+      const stepX = isMob ? 170 : 220;
+      const liveOffset = targetPosRef.current - mouseDragDistance / stepX;
       const clampedLive = Math.max(0, Math.min(TOTAL_CARDS - 1, liveOffset));
       setActiveIndexFloat(clampedLive);
       applyCardTransforms(clampedLive, isMob);
     };
 
-    const onPointerUp = () => {
-      if (!isDragging) return;
-      isDragging = false;
+    const onMouseUp = () => {
+      if (!isMouseDragging) return;
+      isMouseDragging = false;
 
-      const elapsed = Math.max(1, Date.now() - startTime);
-      const velocity = Math.abs(dragDistance) / elapsed;
-      const threshold = velocity > 0.22 ? 18 : 28;
+      const elapsed = Math.max(1, Date.now() - mouseStartTime);
+      const velocity = Math.abs(mouseDragDistance) / elapsed;
+      const threshold = velocity > 0.2 ? 16 : 26;
 
-      if (dragDistance < -threshold) {
-        goToCard(targetPosRef.current + 1);
-      } else if (dragDistance > threshold) {
-        goToCard(targetPosRef.current - 1);
+      if (mouseDragDistance < -threshold) {
+        goToCard(targetPosRef.current + 1, 0.28);
+      } else if (mouseDragDistance > threshold) {
+        goToCard(targetPosRef.current - 1, 0.28);
       } else {
-        goToCard(targetPosRef.current);
+        goToCard(targetPosRef.current, 0.22);
       }
-    };
 
-    const onPointerCancel = () => {
-      if (!isDragging) return;
-      isDragging = false;
-      goToCard(targetPosRef.current);
+      setTimeout(() => {
+        draggedFarRef.current = false;
+      }, 150);
     };
 
     el.addEventListener('wheel', onWheel, { passive: false });
-    el.addEventListener('pointerdown', onPointerDown);
-    window.addEventListener('pointermove', onPointerMove);
-    window.addEventListener('pointerup', onPointerUp);
-    window.addEventListener('pointercancel', onPointerCancel);
+
+    // Native touch listeners for Android and iOS
+    el.addEventListener('touchstart', onTouchStart, { passive: true });
+    el.addEventListener('touchmove', onTouchMove, { passive: false });
+    el.addEventListener('touchend', onTouchEnd, { passive: true });
+    el.addEventListener('touchcancel', onTouchCancel, { passive: true });
+
+    // Desktop mouse listeners
+    el.addEventListener('mousedown', onMouseDown);
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
 
     // Initial layout pass: ensure Card 03 is centered on load
     applyCardTransforms(START_INDEX, window.innerWidth < 768);
 
     return () => {
       el.removeEventListener('wheel', onWheel);
-      el.removeEventListener('pointerdown', onPointerDown);
-      window.removeEventListener('pointermove', onPointerMove);
-      window.removeEventListener('pointerup', onPointerUp);
-      window.removeEventListener('pointercancel', onPointerCancel);
+      el.removeEventListener('touchstart', onTouchStart);
+      el.removeEventListener('touchmove', onTouchMove);
+      el.removeEventListener('touchend', onTouchEnd);
+      el.removeEventListener('touchcancel', onTouchCancel);
+      el.removeEventListener('mousedown', onMouseDown);
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', onMouseUp);
       clearTimeout(accTimer);
     };
   }, [goToCard, applyCardTransforms]);
 
   const handlePrev = () => {
-    goToCard(activeInt - 1);
+    goToCard(activeInt - 1, 0.22);
   };
 
   const handleNext = () => {
-    goToCard(activeInt + 1);
+    goToCard(activeInt + 1, 0.22);
   };
 
   return (
@@ -236,7 +344,8 @@ export const ServiceCardsRow: React.FC = () => {
     >
       <div
         ref={containerRef}
-        className="w-full flex flex-col justify-center overflow-hidden py-2 select-none"
+        className="w-full flex flex-col justify-center overflow-hidden py-2 select-none touch-pan-y"
+        style={{ touchAction: 'pan-y' }}
       >
         <Container size="xl">
           {/* Header */}
@@ -251,7 +360,10 @@ export const ServiceCardsRow: React.FC = () => {
           </div>
 
           {/* Interactive Carousel Stage */}
-          <div className="relative flex items-center justify-center py-2 select-none touch-pan-y">
+          <div
+            className="relative flex items-center justify-center py-2 select-none touch-pan-y"
+            style={{ touchAction: 'pan-y' }}
+          >
             {/* Previous Arrow Button */}
             <button
               type="button"
@@ -270,7 +382,8 @@ export const ServiceCardsRow: React.FC = () => {
             {/* Horizontally Managed Track */}
             <div
               ref={trackRef}
-              className="relative w-full h-[270px] sm:h-[285px] flex items-center justify-center overflow-visible"
+              className="relative w-full h-[270px] sm:h-[285px] flex items-center justify-center overflow-visible select-none touch-pan-y"
+              style={{ touchAction: 'pan-y' }}
             >
               {SERVICES_DATA.map((service, idx) => {
                 const img = SERVICE_IMAGES[service.id];
@@ -284,13 +397,15 @@ export const ServiceCardsRow: React.FC = () => {
                       cardElementsRef.current[idx] = el;
                     }}
                     onClick={() => {
+                      if (draggedFarRef.current) return;
                       if (isNearCenter) {
                         scrollToSection('services');
                       } else {
-                        goToCard(idx);
+                        goToCard(idx, 0.22);
                       }
                     }}
-                    className="absolute w-[200px] sm:w-[225px] lg:w-[240px] h-[245px] sm:h-[260px] lg:h-[270px] rounded-2xl overflow-hidden bg-slate-900 text-left transition-shadow duration-300 cursor-pointer shadow-xl will-change-transform border border-white/15"
+                    className="absolute w-[200px] sm:w-[225px] lg:w-[240px] h-[245px] sm:h-[260px] lg:h-[270px] rounded-2xl overflow-hidden bg-slate-900 text-left transition-shadow duration-300 cursor-pointer shadow-xl will-change-transform border border-white/15 select-none touch-pan-y"
+                    style={{ touchAction: 'pan-y' }}
                   >
                     {/* Golden Glow Border on Center Card */}
                     <div className="card-border-glow absolute inset-0 rounded-2xl border-2 border-amber-400 shadow-[0_0_28px_rgba(245,158,11,0.32)] ring-1 ring-amber-400/50 pointer-events-none" />
@@ -299,7 +414,8 @@ export const ServiceCardsRow: React.FC = () => {
                     <img
                       src={img}
                       alt={service.title}
-                      className="absolute inset-0 w-full h-full object-cover"
+                      draggable={false}
+                      className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
                       loading="lazy"
                       decoding="async"
                     />
@@ -308,22 +424,22 @@ export const ServiceCardsRow: React.FC = () => {
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/40 to-black/25 pointer-events-none" />
 
                     {/* Card Content */}
-                    <div className="absolute inset-0 p-3.5 sm:p-4 flex flex-col justify-between">
+                    <div className="absolute inset-0 p-3.5 sm:p-4 flex flex-col justify-between pointer-events-none">
                       {/* Step Number Top Left */}
-                      <span className="font-mono font-bold tracking-wider text-xs sm:text-sm text-white/80">
+                      <span className="font-mono font-bold tracking-wider text-xs sm:text-sm text-white/80 select-none">
                         {service.number}
                       </span>
 
                       {/* Title & Yellow Arrow Button */}
-                      <div className="flex items-end justify-between gap-1.5">
-                        <h4 className="font-bold text-white text-xs sm:text-[13px] lg:text-sm leading-snug tracking-tight">
+                      <div className="flex items-end justify-between gap-1.5 pointer-events-none">
+                        <h4 className="font-bold text-white text-xs sm:text-[13px] lg:text-sm leading-snug tracking-tight select-none">
                           {service.title}
                         </h4>
 
                         {/* Yellow Round Button on Center Card */}
                         <div
                           aria-label="View Service Details"
-                          className="card-yellow-btn w-8 h-8 rounded-full bg-[#f59e0b] hover:bg-[#fbbf24] text-slate-950 flex items-center justify-center font-bold shadow-md transition-all hover:scale-110 shrink-0 ml-1 cursor-pointer"
+                          className="card-yellow-btn w-8 h-8 rounded-full bg-[#f59e0b] hover:bg-[#fbbf24] text-slate-950 flex items-center justify-center font-bold shadow-md transition-all hover:scale-110 shrink-0 ml-1 cursor-pointer pointer-events-auto"
                         >
                           <ArrowRight className="w-4 h-4 text-slate-950 stroke-[2.5]" />
                         </div>
@@ -356,7 +472,7 @@ export const ServiceCardsRow: React.FC = () => {
               <button
                 key={i}
                 type="button"
-                onClick={() => goToCard(i)}
+                onClick={() => goToCard(i, 0.22)}
                 aria-label={`Go to service ${i + 1}`}
                 className={`h-1 rounded-full transition-all duration-300 cursor-pointer ${
                   i === activeInt
