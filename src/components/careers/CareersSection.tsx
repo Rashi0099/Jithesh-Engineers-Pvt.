@@ -478,7 +478,7 @@ export const CareersSection: React.FC = () => {
               {submittedJobId === 'general' ? (
                 <div className="border border-emerald-200 bg-emerald-50/50 rounded-xl p-6 text-center max-w-lg mx-auto space-y-2">
                   <CheckCircle2 className="w-7 h-7 text-emerald-600 mx-auto" />
-                  <h4 className="text-sm font-bold text-slate-900">Resume Received!</h4>
+                  <h3 className="text-sm font-bold text-slate-900">Resume Received!</h3>
                   <p className="text-xs text-slate-600">
                     Thank you <span className="font-semibold">{submittedName}</span>. Your resume has been added to our talent repository. We will contact you when suitable openings arise.
                   </p>
@@ -490,10 +490,11 @@ export const CareersSection: React.FC = () => {
                 >
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-semibold text-slate-700 mb-1">
+                      <label htmlFor="general-fullName" className="block text-xs font-semibold text-slate-700 mb-1">
                         Full Name *
                       </label>
                       <input
+                        id="general-fullName"
                         type="text"
                         name="fullName"
                         required
@@ -504,10 +505,11 @@ export const CareersSection: React.FC = () => {
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold text-slate-700 mb-1">
+                      <label htmlFor="general-email" className="block text-xs font-semibold text-slate-700 mb-1">
                         Email Address *
                       </label>
                       <input
+                        id="general-email"
                         type="email"
                         name="email"
                         required
@@ -521,10 +523,11 @@ export const CareersSection: React.FC = () => {
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-semibold text-slate-700 mb-1">
+                      <label htmlFor="general-phone" className="block text-xs font-semibold text-slate-700 mb-1">
                         Phone Number *
                       </label>
                       <input
+                        id="general-phone"
                         type="tel"
                         name="phone"
                         required
@@ -535,10 +538,11 @@ export const CareersSection: React.FC = () => {
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold text-slate-700 mb-1">
+                      <label htmlFor="general-experience" className="block text-xs font-semibold text-slate-700 mb-1">
                         Field of Interest / Specialization
                       </label>
                       <input
+                        id="general-experience"
                         type="text"
                         name="experience"
                         value={formData.experience}

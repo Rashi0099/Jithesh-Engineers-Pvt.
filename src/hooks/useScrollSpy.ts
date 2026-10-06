@@ -74,7 +74,11 @@ export function useScrollSpy(sectionIds: string[], offset = 110): string {
       }
     };
 
-    handleScroll();
+    // Only query geometric layout if user is already scrolled down (e.g. reload on section)
+    if (typeof window !== 'undefined' && window.scrollY >= 80) {
+      handleScroll();
+    }
+
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, [sectionIds, offset]);

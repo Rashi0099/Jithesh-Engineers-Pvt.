@@ -1,42 +1,51 @@
-import Lenis from 'lenis';
+type LenisType = import('lenis').default;
 
-let lenisInstance: Lenis | null = null;
+let lenisInstance: LenisType | null = null;
 
 /**
  * Initialize Lenis smooth scrolling singleton
  */
-export function initLenis(): Lenis {
-  if (typeof window === 'undefined') return null as unknown as Lenis;
+export function initLenis(): void {
+  if (typeof window === 'undefined') return;
+
+  // On touch/mobile devices, native momentum scrolling is hardware accelerated & zero TBT
+  const isTouchDevice =
+    window.matchMedia('(pointer: coarse)').matches || window.innerWidth < 768;
+  if (isTouchDevice) {
+    return;
+  }
 
   if (lenisInstance) {
-    return lenisInstance;
+    return;
   }
 
-  lenisInstance = new Lenis({
-    duration: 1.2,
-    easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-    orientation: 'vertical',
-    gestureOrientation: 'vertical',
-    smoothWheel: true,
-    wheelMultiplier: 1.0,
-    touchMultiplier: 1.2,
-    infinite: false,
-  });
+  import('lenis').then(({ default: Lenis }) => {
+    if (lenisInstance) return;
 
-  function raf(time: number) {
-    lenisInstance?.raf(time);
+    lenisInstance = new Lenis({
+      duration: 1.2,
+      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      orientation: 'vertical',
+      gestureOrientation: 'vertical',
+      smoothWheel: true,
+      wheelMultiplier: 1.0,
+      touchMultiplier: 1.2,
+      infinite: false,
+    });
+
+    function raf(time: number) {
+      lenisInstance?.raf(time);
+      requestAnimationFrame(raf);
+    }
+
     requestAnimationFrame(raf);
-  }
-
-  requestAnimationFrame(raf);
-
-  return lenisInstance;
+  });
 }
 
 /**
  * Get current Lenis instance
  */
-export function getLenis(): Lenis | null {
+export function getLenis(): LenisType | null {
   return lenisInstance;
 }
 

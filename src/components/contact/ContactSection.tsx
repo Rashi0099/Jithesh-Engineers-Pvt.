@@ -130,9 +130,9 @@ export const ContactSection: React.FC = () => {
                   <div className="w-14 h-14 rounded-full bg-green-50 border border-green-200 flex items-center justify-center mx-auto text-green-600">
                     <CheckCircle2 className="w-7 h-7" />
                   </div>
-                  <h4 className="text-xl font-bold text-brand-navy">
+                  <h3 className="text-xl font-bold text-brand-navy">
                     Inquiry Received
-                  </h4>
+                  </h3>
                   <p className="text-brand-muted max-w-md mx-auto text-xs sm:text-sm leading-relaxed">
                     Thank you. Our structural engineering team will review your specifications and get in touch promptly.
                   </p>
@@ -157,10 +157,11 @@ export const ContactSection: React.FC = () => {
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1 uppercase tracking-wider">
+                      <label htmlFor="contact-fullName" className="block text-xs font-bold text-slate-700 mb-1 uppercase tracking-wider">
                         Full Name *
                       </label>
                       <input
+                        id="contact-fullName"
                         type="text"
                         required
                         value={formData.fullName}
@@ -171,10 +172,11 @@ export const ContactSection: React.FC = () => {
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1 uppercase tracking-wider">
+                      <label htmlFor="contact-email" className="block text-xs font-bold text-slate-700 mb-1 uppercase tracking-wider">
                         Email Address *
                       </label>
                       <input
+                        id="contact-email"
                         type="email"
                         required
                         value={formData.email}
@@ -187,10 +189,11 @@ export const ContactSection: React.FC = () => {
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1 uppercase tracking-wider">
+                      <label htmlFor="contact-phone" className="block text-xs font-bold text-slate-700 mb-1 uppercase tracking-wider">
                         Phone Number
                       </label>
                       <input
+                        id="contact-phone"
                         type="tel"
                         value={formData.phone}
                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
@@ -200,10 +203,11 @@ export const ContactSection: React.FC = () => {
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1 uppercase tracking-wider">
+                      <label htmlFor="contact-subject" className="block text-xs font-bold text-slate-700 mb-1 uppercase tracking-wider">
                         Subject
                       </label>
                       <select
+                        id="contact-subject"
                         name="subject"
                         value={formData.subject}
                         onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
@@ -219,10 +223,11 @@ export const ContactSection: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1 uppercase tracking-wider">
+                    <label htmlFor="contact-message" className="block text-xs font-bold text-slate-700 mb-1 uppercase tracking-wider">
                       Project Details / Message *
                     </label>
                     <textarea
+                      id="contact-message"
                       rows={4}
                       required
                       value={formData.message}

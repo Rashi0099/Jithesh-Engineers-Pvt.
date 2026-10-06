@@ -170,4 +170,11 @@
   .animate-marquee-reverse:hover {
     animation-play-state: paused;
   }
+
+  /* High-performance content visibility for off-screen sections (slashes initial main-thread layout time) */
+  .section-deferred {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 700px;
+  }
 }
+

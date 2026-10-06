@@ -34,7 +34,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
     category: 'Residential',
     location: 'Karaparamba, Kozhikode',
     image:
-      'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=75&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=500&q=70&auto=format&fit=crop',
     year: '2023',
     scope: 'G+14 RCC Framing & Shear Walls',
     description:
@@ -46,7 +46,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
     category: 'Commercial',
     location: 'Kozhikode, Kerala',
     image:
-      'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=75&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=500&q=70&auto=format&fit=crop',
     year: '2022',
     scope: 'High-Rise RCC Frame & Deep Foundations',
     description:
@@ -58,7 +58,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
     category: 'Residential',
     location: 'Calicut, Kerala',
     image:
-      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=75&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=500&q=70&auto=format&fit=crop',
     year: '2023',
     scope: 'RCC Cantilevers & Framed Substructure',
     description:
@@ -70,7 +70,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
     category: 'Institutional',
     location: 'Malappuram, Kerala',
     image:
-      'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=800&q=75&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=500&q=70&auto=format&fit=crop',
     year: '2021',
     scope: 'Large Clear-Span Lecture Auditoriums',
     description:
@@ -82,7 +82,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
     category: 'Industrial',
     location: 'Palakkad, Kerala',
     image:
-      'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=75&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=500&q=70&auto=format&fit=crop',
     year: '2023',
     scope: 'Steel PEB & Dynamic Crane Loading',
     description:
@@ -94,7 +94,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
     category: 'Specialized',
     location: 'Riyadh, Saudi Arabia',
     image:
-      'https://images.unsplash.com/photo-1513694203232-719a280e022f?w=800&q=75&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1513694203232-719a280e022f?w=500&q=70&auto=format&fit=crop',
     year: '2023',
     scope: '60m Clear Span Tubular Space Truss',
     description:
@@ -106,7 +106,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
     category: 'Commercial',
     location: 'Calicut, Kerala',
     image:
-      'https://images.unsplash.com/photo-1555636222-cae831e670b3?w=800&q=75&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1555636222-cae831e670b3?w=500&q=70&auto=format&fit=crop',
     year: '2024',
     scope: 'Post-Tensioned Flat Slabs',
     description:
@@ -118,7 +118,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
     category: 'Residential',
     location: 'Kochi, Kerala',
     image:
-      'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=800&q=75&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=500&q=70&auto=format&fit=crop',
     year: '2024',
     scope: 'Coastal Shear Wall & Deep Piling',
     description:
@@ -130,7 +130,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
     category: 'Industrial',
     location: 'Riyadh, Saudi Arabia',
     image:
-      'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&q=75&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=500&q=70&auto=format&fit=crop',
     year: '2023',
     scope: 'Pre-Engineered Steel Frames',
     description:

@@ -30,7 +30,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenBrochure }) => {
               <p className="text-sm text-slate-400 leading-relaxed">
                 A premier structural engineering consultancy delivering reliable, efficient, and technically sound engineering solutions across India and Saudi Arabia.
               </p>
-              <div className="text-xs text-slate-500 font-mono">
+              <div className="text-xs text-slate-400 font-mono">
                 Established {COMPANY_INFO.established} • Headquartered in {COMPANY_INFO.headquarters}
               </div>
               {onOpenBrochure && (
@@ -49,9 +49,9 @@ export const Footer: React.FC<FooterProps> = ({ onOpenBrochure }) => {
 
             {/* Col 2: Navigation Links */}
             <div>
-              <h4 className="text-xs font-mono uppercase tracking-widest text-slate-400 mb-5 font-semibold">
+              <h3 className="text-xs font-mono uppercase tracking-widest text-slate-300 mb-5 font-semibold">
                 Navigation
-              </h4>
+              </h3>
               <ul className="space-y-2.5 text-sm">
                 {NAV_ITEMS.map((item) => (
                   <li key={item.targetId}>
@@ -69,9 +69,9 @@ export const Footer: React.FC<FooterProps> = ({ onOpenBrochure }) => {
 
             {/* Col 3: Services */}
             <div>
-              <h4 className="text-xs font-mono uppercase tracking-widest text-slate-400 mb-5 font-semibold">
+              <h3 className="text-xs font-mono uppercase tracking-widest text-slate-300 mb-5 font-semibold">
                 Core Expertise
-              </h4>
+              </h3>
               <ul className="space-y-2.5 text-sm">
                 {SERVICES_DATA.slice(0, 5).map((s) => (
                   <li key={s.id}>
@@ -89,9 +89,9 @@ export const Footer: React.FC<FooterProps> = ({ onOpenBrochure }) => {
 
             {/* Col 4: Contact Office */}
             <div className="space-y-3.5 text-sm">
-              <h4 className="text-xs font-mono uppercase tracking-widest text-slate-400 mb-5 font-semibold">
+              <h3 className="text-xs font-mono uppercase tracking-widest text-slate-300 mb-5 font-semibold">
                 Contact Office
-              </h4>
+              </h3>
               <div className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
                 <span className="text-slate-400">{COMPANY_INFO.address}</span>
@@ -124,7 +124,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenBrochure }) => {
       </div>
 
       {/* Bottom Sub-footer */}
-      <div className="border-t border-white/10 py-6 text-xs text-slate-500">
+      <div className="border-t border-white/10 py-6 text-xs text-slate-400">
         <Container size="xl">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <p>
@@ -137,7 +137,8 @@ export const Footer: React.FC<FooterProps> = ({ onOpenBrochure }) => {
                   href={s.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-white transition-colors"
+                  aria-label={s.name}
+                  className="text-slate-400 hover:text-white transition-colors"
                 >
                   {s.name}
                 </a>

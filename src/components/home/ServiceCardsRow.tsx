@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { gsap } from 'gsap';
 import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
 import { Container } from '@/components/common/Container';
 import { SERVICES_DATA } from '@/data/services';
@@ -7,17 +6,17 @@ import { scrollToSection } from '@/hooks/useScrollSpy';
 
 const SERVICE_IMAGES: Record<string, string> = {
   'structural-design':
-    'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=600&q=80&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=400&q=70&auto=format&fit=crop',
   'structural-detailing':
-    'https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=600&q=80&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400&q=70&auto=format&fit=crop',
   'steel-structures':
-    'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=80&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=400&q=70&auto=format&fit=crop',
   'structural-inspection':
-    'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=600&q=80&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=400&q=70&auto=format&fit=crop',
   'retrofitting-strengthening':
-    'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&q=80&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&q=70&auto=format&fit=crop',
   'specialized-structures':
-    'https://images.unsplash.com/photo-1513694203232-719a280e022f?w=600&q=80&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1513694203232-719a280e022f?w=400&q=70&auto=format&fit=crop',
 };
 
 const TOTAL_CARDS = SERVICES_DATA.length;
@@ -29,6 +28,7 @@ export const ServiceCardsRow: React.FC = () => {
   const trackRef = useRef<HTMLDivElement>(null);
   const cardElementsRef = useRef<(HTMLDivElement | null)[]>([]);
   const draggedFarRef = useRef<boolean>(false);
+  const rafIdRef = useRef<number | null>(null);
 
   // Active floating index (default starts at Card 03: index 2)
   const [activeIndexFloat, setActiveIndexFloat] = useState(START_INDEX);
@@ -36,6 +36,13 @@ export const ServiceCardsRow: React.FC = () => {
 
   const targetPosRef = useRef<number>(START_INDEX);
   const animPosRef = useRef<{ pos: number }>({ pos: START_INDEX });
+
+  const stopAnimation = useCallback(() => {
+    if (rafIdRef.current !== null) {
+      cancelAnimationFrame(rafIdRef.current);
+      rafIdRef.current = null;
+    }
+  }, []);
 
   // Update card transform, scale, opacity, and glow smoothly
   const applyCardTransforms = useCallback((currentPos: number, isMob: boolean) => {
@@ -86,20 +93,38 @@ export const ServiceCardsRow: React.FC = () => {
     setActiveInt(clamped);
 
     const isMob = typeof window !== 'undefined' && window.innerWidth < 768;
-    const dur = customDuration !== undefined ? customDuration : (isMob ? 0.22 : 0.45);
+    const durSec = customDuration !== undefined ? customDuration : (isMob ? 0.22 : 0.40);
+    const durMs = durSec * 1000;
 
-    gsap.killTweensOf(animPosRef.current);
-    gsap.to(animPosRef.current, {
-      pos: clamped,
-      duration: dur,
-      ease: 'power2.out',
-      onUpdate: () => {
-        const p = animPosRef.current.pos;
-        setActiveIndexFloat(p);
-        applyCardTransforms(p, isMob);
-      },
-    });
-  }, [applyCardTransforms]);
+    stopAnimation();
+    const startPos = animPosRef.current.pos;
+    const change = clamped - startPos;
+    if (Math.abs(change) < 0.001 || durMs <= 0) {
+      animPosRef.current.pos = clamped;
+      setActiveIndexFloat(clamped);
+      applyCardTransforms(clamped, isMob);
+      return;
+    }
+
+    const startTime = performance.now();
+    const tick = (now: number) => {
+      const elapsed = now - startTime;
+      const progress = Math.min(1, elapsed / durMs);
+      // power2.out (easeOutQuad): 1 - (1 - t)^2
+      const ease = 1 - (1 - progress) * (1 - progress);
+      const current = startPos + change * ease;
+      animPosRef.current.pos = current;
+      setActiveIndexFloat(current);
+      applyCardTransforms(current, isMob);
+
+      if (progress < 1) {
+        rafIdRef.current = requestAnimationFrame(tick);
+      } else {
+        rafIdRef.current = null;
+      }
+    };
+    rafIdRef.current = requestAnimationFrame(tick);
+  }, [applyCardTransforms, stopAnimation]);
 
   // Handle smooth, natural scroll wheel & trackpad gestures
   useEffect(() => {
@@ -167,8 +192,8 @@ export const ServiceCardsRow: React.FC = () => {
       if (e.touches.length !== 1) return;
       if ((e.target as HTMLElement).closest('button, a, .card-yellow-btn')) return;
 
-      // Stop any in-flight GSAP animation immediately so finger has instant 1:1 control
-      gsap.killTweensOf(animPosRef.current);
+      // Stop any in-flight animation immediately so finger has instant 1:1 control
+      stopAnimation();
       targetPosRef.current = Math.round(animPosRef.current.pos);
       setActiveIndexFloat(targetPosRef.current);
 
@@ -267,7 +292,7 @@ export const ServiceCardsRow: React.FC = () => {
       if (e.button !== 0) return;
       if ((e.target as HTMLElement).closest('button, a, .card-yellow-btn')) return;
 
-      gsap.killTweensOf(animPosRef.current);
+      stopAnimation();
       targetPosRef.current = Math.round(animPosRef.current.pos);
       setActiveIndexFloat(targetPosRef.current);
 
@@ -373,9 +398,12 @@ export const ServiceCardsRow: React.FC = () => {
         <Container size="xl">
           {/* Header */}
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-4 sm:mb-6 border-b border-white/10 pb-3">
-            <div className="flex items-center gap-2.5 text-xs font-mono tracking-widest text-[#d4af37] uppercase font-semibold">
-              <span className="w-6 h-px bg-[#d4af37]" />
-              <span>Our Services</span>
+            <div>
+              <h2 className="sr-only">Our Specialized Engineering Services</h2>
+              <div className="flex items-center gap-2.5 text-xs font-mono tracking-widest text-[#d4af37] uppercase font-semibold">
+                <span className="w-6 h-px bg-[#d4af37]" />
+                <span>Our Services</span>
+              </div>
             </div>
             <p className="text-xs sm:text-sm text-slate-400 max-w-md leading-relaxed hidden sm:block">
               From conceptual design to construction support, we deliver precision engineering across sectors.
@@ -438,6 +466,8 @@ export const ServiceCardsRow: React.FC = () => {
                       src={img}
                       alt={service.title}
                       draggable={false}
+                      width="240"
+                      height="270"
                       className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
                       loading="lazy"
                       decoding="async"
@@ -455,17 +485,18 @@ export const ServiceCardsRow: React.FC = () => {
 
                       {/* Title & Yellow Arrow Button */}
                       <div className="flex items-end justify-between gap-1.5 pointer-events-none">
-                        <h4 className="font-bold text-white text-xs sm:text-[13px] lg:text-sm leading-snug tracking-tight select-none">
+                        <h3 className="font-bold text-white text-xs sm:text-[13px] lg:text-sm leading-snug tracking-tight select-none">
                           {service.title}
-                        </h4>
+                        </h3>
 
                         {/* Yellow Round Button on Center Card */}
-                        <div
+                        <button
+                          type="button"
                           aria-label="View Service Details"
                           className="card-yellow-btn w-8 h-8 rounded-full bg-[#f59e0b] hover:bg-[#fbbf24] text-slate-950 flex items-center justify-center font-bold shadow-md transition-all hover:scale-110 shrink-0 ml-1 cursor-pointer pointer-events-auto"
                         >
                           <ArrowRight className="w-4 h-4 text-slate-950 stroke-[2.5]" />
-                        </div>
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -489,20 +520,24 @@ export const ServiceCardsRow: React.FC = () => {
             </button>
           </div>
 
-          {/* Minimal Progress Indicator Dots */}
-          <div className="flex items-center justify-center gap-1.5 mt-3 sm:mt-5">
+          {/* Minimal Progress Indicator Dots with standard touch target area */}
+          <div className="flex items-center justify-center gap-1 mt-2 sm:mt-4">
             {SERVICES_DATA.map((_, i) => (
               <button
                 key={i}
                 type="button"
                 onClick={() => goToCard(i, 0.22)}
                 aria-label={`Go to service ${i + 1}`}
-                className={`h-1 rounded-full transition-all duration-300 cursor-pointer ${
-                  i === activeInt
-                    ? 'w-6 bg-amber-400'
-                    : 'w-2 bg-white/25 hover:bg-white/50'
-                }`}
-              />
+                className="w-7 h-7 flex items-center justify-center p-0 cursor-pointer"
+              >
+                <span
+                  className={`h-1.5 rounded-full transition-all duration-300 block ${
+                    i === activeInt
+                      ? 'w-6 bg-amber-400'
+                      : 'w-2 bg-white/30 hover:bg-white/60'
+                  }`}
+                />
+              </button>
             ))}
           </div>
         </Container>

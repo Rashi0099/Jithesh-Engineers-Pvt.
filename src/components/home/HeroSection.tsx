@@ -16,8 +16,10 @@ export const HeroSection: React.FC = () => {
         <img
           src={assetUrl('/hero-modern-house.png')}
           alt="Cinematic Modern Architectural Structure at Twilight"
+          width="1920"
+          height="1080"
           className="w-full h-full object-cover object-[75%_center] md:object-center"
-          fetchPriority="high"
+          {...({ fetchpriority: 'high' } as any)}
           loading="eager"
           decoding="sync"
         />

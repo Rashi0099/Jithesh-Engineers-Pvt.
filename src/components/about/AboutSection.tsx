@@ -6,9 +6,9 @@ import { scrollToSection } from '@/hooks/useScrollSpy';
 import { assetUrl } from '@/lib/assets';
 import { getLenis } from '@/lib/lenis';
 
-const FOUNDER_PHOTO = assetUrl('/real-assets/director.jpg');
-const CERTIFICATE_IMAGE = assetUrl('/real-assets/certificate_02.jpg');
-const PAPER_CUT_IMAGE = assetUrl('/real-assets/paper_cut_01.jpg');
+const FOUNDER_PHOTO = assetUrl('/real-assets/director.webp');
+const CERTIFICATE_IMAGE = assetUrl('/real-assets/certificate_02.webp');
+const PAPER_CUT_IMAGE = assetUrl('/real-assets/paper_cut_01.webp');
 
 export const AboutSection: React.FC = () => {
   const [activeAwardModal, setActiveAwardModal] = useState<{ title: string; image: string } | null>(null);
@@ -76,9 +76,9 @@ export const AboutSection: React.FC = () => {
 
             {/* Awards & Recognition Strip */}
             <div className="pt-2">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 font-mono mb-3">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-600 font-mono mb-3">
                 National Awards & Recognition
-              </h4>
+              </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <button
                   type="button"
@@ -88,16 +88,18 @@ export const AboutSection: React.FC = () => {
                   <img
                     src={CERTIFICATE_IMAGE}
                     alt="Fastest Growing Indian Company Excellence Award"
+                    width="48"
+                    height="48"
                     className="w-12 h-12 rounded-lg object-cover border border-slate-200 shrink-0 group-hover:scale-105 transition-transform"
                     loading="lazy"
                     decoding="async"
                   />
                   <div className="min-w-0">
-                    <span className="text-[10px] font-mono uppercase text-slate-400 font-semibold block">IAC Excellence Award</span>
+                    <span className="text-[10px] font-mono uppercase text-slate-600 font-semibold block">IAC Excellence Award</span>
                     <span className="text-xs font-bold text-slate-900 truncate block">Fastest Growing Indian Company</span>
-                    <span className="text-[11px] text-slate-500 flex items-center gap-1 mt-0.5">
+                    <span className="text-[11px] text-slate-600 flex items-center gap-1 mt-0.5">
                       <span>View Certificate</span>
-                      <ExternalLink className="w-3 h-3 text-slate-400" />
+                      <ExternalLink className="w-3 h-3 text-slate-500" />
                     </span>
                   </div>
                 </button>
@@ -110,16 +112,18 @@ export const AboutSection: React.FC = () => {
                   <img
                     src={PAPER_CUT_IMAGE}
                     alt="SiliconIndia 10 Most Promising Engineering Consultants"
+                    width="48"
+                    height="48"
                     className="w-12 h-12 rounded-lg object-cover border border-slate-200 shrink-0 group-hover:scale-105 transition-transform"
                     loading="lazy"
                     decoding="async"
                   />
                   <div className="min-w-0">
-                    <span className="text-[10px] font-mono uppercase text-slate-400 font-semibold block">SiliconIndia Feature</span>
+                    <span className="text-[10px] font-mono uppercase text-slate-600 font-semibold block">SiliconIndia Feature</span>
                     <span className="text-xs font-bold text-slate-900 truncate block">10 Most Promising Consultants</span>
-                    <span className="text-[11px] text-slate-500 flex items-center gap-1 mt-0.5">
+                    <span className="text-[11px] text-slate-600 flex items-center gap-1 mt-0.5">
                       <span>View Feature</span>
-                      <ExternalLink className="w-3 h-3 text-slate-400" />
+                      <ExternalLink className="w-3 h-3 text-slate-500" />
                     </span>
                   </div>
                 </button>
@@ -135,6 +139,8 @@ export const AboutSection: React.FC = () => {
                 <img
                   src={FOUNDER_PHOTO}
                   alt="Er. K. Jithesh - Managing Director & Chief Structural Engineer"
+                  width="600"
+                  height="450"
                   className="w-full h-full object-cover object-top group-hover:scale-103 transition-transform duration-500"
                   loading="lazy"
                   decoding="async"

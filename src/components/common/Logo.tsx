@@ -39,6 +39,8 @@ export const Logo: React.FC<LogoProps> = ({
     <img
       src={src}
       alt="Jithesh Engineers Pvt. Ltd. | Structural Engineers"
+      width="180"
+      height="36"
       className={`object-contain transition-all duration-300 select-none ${imgClassName}`}
       loading="eager"
     />

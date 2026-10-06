@@ -56,8 +56,10 @@ export function useScroll(threshold = 40): ScrollState {
       }
     };
 
-    // Initialize state
-    handleScroll();
+    // Only query if already scrolled down on initial load (e.g. back navigation)
+    if (typeof window !== 'undefined' && window.scrollY > threshold) {
+      handleScroll();
+    }
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);

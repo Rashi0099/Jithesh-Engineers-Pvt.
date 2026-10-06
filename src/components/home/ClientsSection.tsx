@@ -9,9 +9,9 @@ export const ClientsSection: React.FC = () => {
   const row1 = CLIENTS_DATA.slice(0, 7);
   const row2 = CLIENTS_DATA.slice(7);
 
-  // 4x duplicate ensures 100% seamless infinite loop without gaps on all screen sizes up to 4K
-  const marqueeRow1 = [...row1, ...row1, ...row1, ...row1];
-  const marqueeRow2 = [...row2, ...row2, ...row2, ...row2];
+  // 2x duplicate is mathematically sufficient for seamless infinite translateX(-50%) loop while cutting DOM nodes in half
+  const marqueeRow1 = [...row1, ...row1];
+  const marqueeRow2 = [...row2, ...row2];
 
   return (
     <section id="clients" className="py-10 sm:py-14 bg-slate-50/75 border-y border-slate-200/80 relative overflow-hidden w-full max-w-full">
@@ -51,6 +51,8 @@ export const ClientsSection: React.FC = () => {
                 <img
                   src={assetUrl(client.logo)}
                   alt={client.name}
+                  width="160"
+                  height="48"
                   className="h-11 sm:h-12 md:h-13 w-auto max-w-[84%] object-contain transition-transform duration-300 group-hover:scale-105"
                   loading="lazy"
                   decoding="async"
@@ -72,6 +74,8 @@ export const ClientsSection: React.FC = () => {
                 <img
                   src={assetUrl(client.logo)}
                   alt={client.name}
+                  width="160"
+                  height="48"
                   className="h-11 sm:h-12 md:h-13 w-auto max-w-[84%] object-contain transition-transform duration-300 group-hover:scale-105"
                   loading="lazy"
                   decoding="async"

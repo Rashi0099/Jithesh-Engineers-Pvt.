@@ -20,7 +20,6 @@ export default defineConfig({
         manualChunks: {
           'vendor-react': ['react', 'react-dom', 'react-router-dom'],
           'vendor-icons': ['lucide-react'],
-          'vendor-scroll': ['lenis', 'gsap'],
         },
       },
     },

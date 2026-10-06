@@ -32,9 +32,9 @@ export const OurReachSection: React.FC = () => {
               <span className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.2em] text-slate-300 font-semibold block">
                 CROSS-BORDER ENGINEERING EXCELLENCE
               </span>
-              <h4 className="text-lg sm:text-2xl lg:text-3xl font-extrabold text-white leading-snug sm:leading-tight tracking-tight break-words">
+              <h2 className="text-lg sm:text-2xl lg:text-3xl font-extrabold text-white leading-snug sm:leading-tight tracking-tight break-words">
                 Delivering safe, durable, and architecturally expressive structures worldwide.
-              </h4>
+              </h2>
               <div className="pt-2">
                 <button
                   type="button"
