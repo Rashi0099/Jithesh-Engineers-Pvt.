@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Jithesh Engineers Pvt. Ltd. — Corporate Profile</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 0;
+    }
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: #1e293b;
+      background: #ffffff;
+      line-height: 1.5;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .page {
+      width: 210mm;
+      height: 297mm;
+      position: relative;
+      background: #ffffff;
+      padding: 16mm 18mm 14mm 18mm;
+      page-break-after: always;
+      break-after: page;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .page:last-child {
+      page-break-after: avoid;
+      break-after: avoid;
+    }
+
+    /* Header Bar on inner pages */
+    .doc-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1.5px solid #0f172a;
+      padding-bottom: 10px;
+      margin-bottom: 18px;
+    }
+    .doc-header img {
+      height: 28px;
+      width: auto;
+      object-fit: contain;
+    }
+    .doc-header-meta {
+      text-align: right;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8.5pt;
+      color: #64748b;
+      line-height: 1.3;
+    }
+    .doc-header-meta strong {
+      color: #0f172a;
+    }
+
+    /* Footer on inner pages */
+    .doc-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 10px;
+      margin-top: 14px;
+      font-size: 8pt;
+      color: #64748b;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Typography */
+    h1 { font-size: 26pt; font-weight: 900; line-height: 1.15; color: #0f172a; letter-spacing: -0.02em; }
+    h2 { font-size: 16pt; font-weight: 800; color: #0f172a; letter-spacing: -0.01em; margin-bottom: 6px; }
+    h3 { font-size: 11pt; font-weight: 700; color: #0f172a; }
+    p { font-size: 9.5pt; color: #334155; line-height: 1.55; }
+    .badge {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 7.5pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      padding: 3px 8px;
+      background: #f1f5f9;
+      color: #334155;
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+    }
+
+    /* Cover Page Specific */
+    .cover-page {
+      padding: 22mm 22mm 18mm 22mm;
+      background: linear-gradient(145deg, #0b1329 0%, #1e293b 100%);
+      color: #ffffff;
+    }
+    .cover-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+      padding-bottom: 16px;
+    }
+    .cover-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8pt;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: #94a3b8;
+    }
+    .cover-body {
+      margin-top: 24px;
+    }
+    .cover-hero-img {
+      width: 100%;
+      height: 98mm;
+      border-radius: 8px;
+      object-fit: cover;
+      margin-top: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    .cover-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 20px;
+      padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+    }
+    .cover-stat-val {
+      font-size: 15pt;
+      font-weight: 800;
+      color: #ffffff;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .cover-stat-lbl {
+      font-size: 7.5pt;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 2px;
+    }
+    .cover-footer {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      border-top: 1px solid rgba(255, 255, 255, 0.18);
+      padding-top: 14px;
+      font-size: 8pt;
+      color: #94a3b8;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Grids & Cards */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 12px 14px;
+    }
+    .quote-card {
+      background: #f1f5f9;
+      border-left: 4px solid #0f172a;
+      border-radius: 0 8px 8px 0;
+      padding: 12px 16px;
+      margin: 12px 0;
+      font-style: italic;
+    }
+    .spec-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 8.5pt;
+      color: #334155;
+      margin-bottom: 6px;
+    }
+    .spec-bullet {
+      color: #0f172a;
+      font-weight: 900;
+      font-size: 10pt;
+      line-height: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== PAGE 1: COVER ==================== -->
+  <div class="page cover-page">
+    <div class="cover-header">
+      <img src="/logo-white.png" alt="Jithesh Engineers" style="height: 32px; width: auto;">
+      <div class="cover-badge">FIRM QUALIFICATIONS &amp; PROFILE</div>
+    </div>
+
+    <div class="cover-body">
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 9pt; color: #cbd5e1; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 10px;">
+        STRUCTURAL ENGINEERING CONSULTANCY • EST. 2008
+      </div>
+      <h1 style="color: #ffffff; font-size: 27pt; line-height: 1.15; margin-bottom: 10px;">
+        Engineering Structures for a <br><span style="color: #94a3b8;">Better Tomorrow.</span>
+      </h1>
+      <p style="color: #cbd5e1; font-size: 10pt; max-width: 90%; line-height: 1.6;">
+        Providing precision structural design, advanced computational analysis, space frame spatial canopies, and high-rise BIM detailing across India and Saudi Arabia.
+      </p>
+
+      <img src="/real-assets/home_banner_01.jpg" alt="Structural Excellence" class="cover-hero-img">
+
+      <div class="cover-stats">
+        <div>
+          <div class="cover-stat-val">18+</div>
+          <div class="cover-stat-lbl">Years Practice</div>
+        </div>
+        <div>
+          <div class="cover-stat-val">2008</div>
+          <div class="cover-stat-lbl">Year Established</div>
+        </div>
+        <div>
+          <div class="cover-stat-val">100+</div>
+          <div class="cover-stat-lbl">Major Projects</div>
+        </div>
+        <div>
+          <div class="cover-stat-val">IS &amp; ACI</div>
+          <div class="cover-stat-lbl">Code Compliance</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cover-footer">
+      <div>
+        <strong>JITHESH ENGINEERS PVT. LTD.</strong><br>
+        Karaparamba, Kozhikode, Kerala - 673010
+      </div>
+      <div style="text-align: right;">
+        www.jitheshengineers.com<br>
+        CONFIDENTIAL &amp; PROPRIETARY
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== PAGE 2: LEADERSHIP & AWARDS ==================== -->
+  <div class="page">
+    <div>
+      <div class="doc-header">
+        <img src="/logo.png" alt="Jithesh Engineers">
+        <div class="doc-header-meta">
+          <strong>SECTION 01: LEADERSHIP &amp; PHILOSOPHY</strong><br>
+          Jithesh Engineers Pvt. Ltd.
+        </div>
+      </div>
+
+      <div style="margin-bottom: 14px;">
+        <span class="badge">CONSULTANCY LEADERSHIP</span>
+        <h2 style="margin-top: 6px; font-size: 17pt;">Founding Leadership &amp; Credentials</h2>
+      </div>
+
+      <div class="grid-2" style="gap: 20px; align-items: start;">
+        <!-- Left: Director Photo & Accreditations -->
+        <div class="card" style="padding: 16px;">
+          <div style="display: flex; gap: 14px; align-items: center; margin-bottom: 14px;">
+            <img src="/real-assets/director.jpg" alt="Er. K. Jithesh" style="width: 80px; height: 95px; object-fit: cover; object-position: top; border-radius: 6px; border: 1px solid #cbd5e1;">
+            <div>
+              <div style="font-size: 8pt; font-family: 'JetBrains Mono', monospace; color: #64748b; text-transform: uppercase;">
+                MANAGING DIRECTOR &amp; CHIEF ENGINEER
+              </div>
+              <h3 style="font-size: 13pt; margin-top: 2px;">Er. K. Jithesh</h3>
+              <p style="font-size: 8.5pt; color: #475569; margin-top: 2px;">
+                MTech (Structural Engineering)<br>
+                Practicing in Industry Since <strong>1991</strong>
+              </p>
+            </div>
+          </div>
+
+          <div style="border-top: 1px solid #e2e8f0; padding-top: 10px; font-size: 8.5pt;">
+            <div class="spec-item"><span class="spec-bullet">✓</span><span><strong>Chartered Engineer (CEng)</strong> — India</span></div>
+            <div class="spec-item"><span class="spec-bullet">✓</span><span><strong>Member, Institution of Engineers</strong> (India) [MIE]</span></div>
+            <div class="spec-item"><span class="spec-bullet">✓</span><span><strong>Member, Indian Concrete Institute</strong> (ICI)</span></div>
+            <div class="spec-item"><span class="spec-bullet">✓</span><span><strong>Approved Valuer</strong> &amp; Government Licensed Structural Consultant</span></div>
+            <div class="spec-item"><span class="spec-bullet">✓</span><span>34+ Years Engineering Industry Experience</span></div>
+          </div>
+        </div>
+
+        <!-- Right: Firm History & Director Message -->
+        <div>
+          <h3 style="font-size: 11pt; margin-bottom: 8px;">Firm Genesis &amp; Trajectory</h3>
+          <p style="font-size: 9pt; margin-bottom: 10px;">
+            Founded in <strong>2008</strong> in Calicut, Kerala (initially functioning as <em>Jithesh &amp; Associates</em>), the firm has grown into a leading structural design force handling prestigious residential towers, commercial landmarks, PEB industrial sheds, and high-profile spatial trusses across multiple Indian states and Saudi Arabia.
+          </p>
+
+          <div class="quote-card">
+            <p style="font-size: 9pt; color: #0f172a; line-height: 1.5;">
+              “A dream doesn't become reality through magic; it takes hard work, dedication and engineering precision. When I founded this consultancy in Calicut in 2008, our mission was simple: uncompromising safety, economic efficiency, and enduring architectural value.”
+            </p>
+            <div style="margin-top: 6px; font-size: 8pt; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #475569;">
+              — Er. K. Jithesh, MTech, MIE, CEng
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Awards & Honors Section -->
+      <div style="margin-top: 18px;">
+        <span class="badge">INDUSTRY RECOGNITION</span>
+        <h3 style="font-size: 12pt; margin-top: 6px; margin-bottom: 12px;">National Awards &amp; Honors</h3>
+
+        <div class="grid-2" style="gap: 16px;">
+          <!-- Award 1 -->
+          <div class="card" style="display: flex; gap: 12px; align-items: center;">
+            <img src="/real-assets/certificate_02.jpg" alt="Excellence Award" style="width: 70px; height: 55px; object-fit: cover; border-radius: 4px; border: 1px solid #cbd5e1; flex-shrink: 0;">
+            <div>
+              <div style="font-size: 7.5pt; font-family: 'JetBrains Mono', monospace; color: #64748b; text-transform: uppercase;">
+                INTERNATIONAL ACHIEVERS CONFERENCE
+              </div>
+              <div style="font-size: 9pt; font-weight: 700; color: #0f172a;">Fastest Growing Indian Company Excellence Award</div>
+              <p style="font-size: 8pt; color: #64748b; margin-top: 2px;">Honoring structural engineering excellence and sustained commercial growth.</p>
+            </div>
+          </div>
+
+          <!-- Award 2 -->
+          <div class="card" style="display: flex; gap: 12px; align-items: center;">
+            <img src="/real-assets/paper_cut_01.jpg" alt="SiliconIndia Feature" style="width: 70px; height: 55px; object-fit: cover; border-radius: 4px; border: 1px solid #cbd5e1; flex-shrink: 0;">
+            <div>
+              <div style="font-size: 7.5pt; font-family: 'JetBrains Mono', monospace; color: #64748b; text-transform: uppercase;">
+                SILICONINDIA NATIONAL SURVEY (2017)
+              </div>
+              <div style="font-size: 9pt; font-weight: 700; color: #0f172a;">10 Most Promising Engineering Consultants</div>
+              <p style="font-size: 8pt; color: #64748b; margin-top: 2px;">Recognized among top consultancy firms for advanced computational engineering.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="doc-footer">
+      <div>Jithesh Engineers Pvt. Ltd. • Corporate Qualifications</div>
+      <div>Page 02 of 04</div>
+    </div>
+  </div>
+
+  <!-- ==================== PAGE 3: DISCIPLINES & CODES ==================== -->
+  <div class="page">
+    <div>
+      <div class="doc-header">
+        <img src="/logo.png" alt="Jithesh Engineers">
+        <div class="doc-header-meta">
+          <strong>SECTION 02: TECHNICAL SCOPE &amp; DISCIPLINES</strong><br>
+          Jithesh Engineers Pvt. Ltd.
+        </div>
+      </div>
+
+      <div style="margin-bottom: 14px;">
+        <span class="badge">CORE SPECIALIZATIONS</span>
+        <h2 style="margin-top: 6px; font-size: 17pt;">Engineering Disciplines &amp; Standards</h2>
+      </div>
+
+      <!-- 6 Technical Scope Cards -->
+      <div class="grid-2" style="gap: 12px;">
+        <div class="card">
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 8pt; font-weight: 700; color: #0f172a; margin-bottom: 4px;">01. MULTI-STORY RCC &amp; COMMERCIAL FRAMING</div>
+          <p style="font-size: 8.5pt; color: #475569;">
+            Full 3D dynamic analysis for high-rise residential towers and commercial plazas. Modeling column ductility, shear walls, wind load drift, and soil-structure interaction.
+          </p>
+          <div style="margin-top: 6px; font-size: 7.5pt; font-family: 'JetBrains Mono', monospace; color: #0f172a; font-weight: 600;">
+            STANDARDS: IS 456, IS 1893, IS 13920, ACI 318
+          </div>
+        </div>
+
+        <div class="card">
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 8pt; font-weight: 700; color: #0f172a; margin-bottom: 4px;">02. INDUSTRIAL STEEL &amp; PEB STRUCTURES</div>
+          <p style="font-size: 8.5pt; color: #475569;">
+            Design and optimization of Pre-Engineered Buildings, clear-span warehousing, crane gantries, and industrial processing plants with material optimization.
+          </p>
+          <div style="margin-top: 6px; font-size: 7.5pt; font-family: 'JetBrains Mono', monospace; color: #0f172a; font-weight: 600;">
+            STANDARDS: IS 800 (Limit State), MBMA, AISC 360
+          </div>
+        </div>
+
+        <div class="card">
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 8pt; font-weight: 700; color: #0f172a; margin-bottom: 4px;">03. SPATIAL TRUSSES &amp; SPACE FRAME CANOPIES</div>
+          <p style="font-size: 8.5pt; color: #475569;">
+            Specialized long-span tubular node space frames, stadium canopies, entry spatial trusses, and expressive structural architecture across India and Saudi Arabia.
+          </p>
+          <div style="margin-top: 6px; font-size: 7.5pt; font-family: 'JetBrains Mono', monospace; color: #0f172a; font-weight: 600;">
+            STANDARDS: IS 800, Eurocode 3, Saudi Building Code (SBC)
+          </div>
+        </div>
+
+        <div class="card">
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 8pt; font-weight: 700; color: #0f172a; margin-bottom: 4px;">04. DEEP FOUNDATIONS &amp; GEOTECHNICAL MODELING</div>
+          <p style="font-size: 8.5pt; color: #475569;">
+            Bored cast-in-situ piles, pile cap groups, buoyant raft basements, diaphragm walls, and slope stability analysis for coastal and tricky soil stratas.
+          </p>
+          <div style="margin-top: 6px; font-size: 7.5pt; font-family: 'JetBrains Mono', monospace; color: #0f172a; font-weight: 600;">
+            STANDARDS: IS 2911 (Pile Foundations), IS 1904
+          </div>
+        </div>
+
+        <div class="card">
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 8pt; font-weight: 700; color: #0f172a; margin-bottom: 4px;">05. 3D BIM DETAILING &amp; REBAR FABRICATION (BBS)</div>
+          <p style="font-size: 8.5pt; color: #475569;">
+            Clash-free 3D structural BIM models, structural drawings, bar bending schedules (BBS), and steel connection shop drawings minimizing site wastage.
+          </p>
+          <div style="margin-top: 6px; font-size: 7.5pt; font-family: 'JetBrains Mono', monospace; color: #0f172a; font-weight: 600;">
+            TOOLS: ETABS, SAFE, STAAD.Pro, AutoCAD, Revit
+          </div>
+        </div>
+
+        <div class="card">
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 8pt; font-weight: 700; color: #0f172a; margin-bottom: 4px;">06. STRUCTURAL AUDITS, NDT &amp; RETROFITTING</div>
+          <p style="font-size: 8.5pt; color: #475569;">
+            Non-Destructive Testing (Rebound Hammer, Ultrasonic Pulse Velocity), distress mapping, core compression checks, and carbon fiber (FRP) wrapping schemes.
+          </p>
+          <div style="margin-top: 6px; font-size: 7.5pt; font-family: 'JetBrains Mono', monospace; color: #0f172a; font-weight: 600;">
+            STANDARDS: IS 13311 (Part 1 &amp; 2), IS 15988
+          </div>
+        </div>
+      </div>
+
+      <!-- Real Site Visual Strip -->
+      <div style="margin-top: 16px;">
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 8pt; color: #64748b; text-transform: uppercase; margin-bottom: 8px;">
+          FIELD EXECUTION &amp; STRUCTURAL SCHEMES
+        </div>
+        <div class="grid-3" style="gap: 10px;">
+          <img src="/real-assets/1d45a2c8789c1538f2bfede7c0eaf127.jpg" alt="Site Inspection" style="width: 100%; height: 50mm; object-fit: cover; border-radius: 6px; border: 1px solid #cbd5e1;">
+          <img src="/real-assets/1eb61fd8a1b0c75d9df681d06d923433.jpg" alt="Space Frame Detail" style="width: 100%; height: 50mm; object-fit: cover; border-radius: 6px; border: 1px solid #cbd5e1;">
+          <img src="/real-assets/046fd3e786d3c66542f40478708965f1.jpg" alt="RCC Execution" style="width: 100%; height: 50mm; object-fit: cover; border-radius: 6px; border: 1px solid #cbd5e1;">
+        </div>
+      </div>
+    </div>
+
+    <div class="doc-footer">
+      <div>Jithesh Engineers Pvt. Ltd. • Corporate Qualifications</div>
+      <div>Page 03 of 04</div>
+    </div>
+  </div>
+
+  <!-- ==================== PAGE 4: CLIENTS & CONTACT ==================== -->
+  <div class="page">
+    <div>
+      <div class="doc-header">
+        <img src="/logo.png" alt="Jithesh Engineers">
+        <div class="doc-header-meta">
+          <strong>SECTION 03: CLIENTELE &amp; CONTACT</strong><br>
+          Jithesh Engineers Pvt. Ltd.
+        </div>
+      </div>
+
+      <div style="margin-bottom: 14px;">
+        <span class="badge">REGIONAL REACH &amp; CLIENTELE</span>
+        <h2 style="margin-top: 6px; font-size: 17pt;">Trusted by Leading Builders &amp; Developers</h2>
+      </div>
+
+      <!-- 3 Regional Hubs -->
+      <div class="grid-3" style="gap: 10px; margin-bottom: 16px;">
+        <div class="card" style="border-left: 3px solid #0f172a;">
+          <div style="font-size: 7.5pt; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #64748b;">HEADQUARTERS</div>
+          <div style="font-size: 9.5pt; font-weight: 700; color: #0f172a; margin: 2px 0;">Kerala, India</div>
+          <p style="font-size: 8pt; color: #475569;">Active consultancies in Calicut, Kochi, Malappuram, Wayanad, and Kannur.</p>
+        </div>
+
+        <div class="card" style="border-left: 3px solid #0f172a;">
+          <div style="font-size: 7.5pt; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #64748b;">NATIONAL REACH</div>
+          <div style="font-size: 9.5pt; font-weight: 700; color: #0f172a; margin: 2px 0;">Pan-India Operations</div>
+          <p style="font-size: 8pt; color: #475569;">Projects across Karnataka, Tamil Nadu, Goa, and Indian states.</p>
+        </div>
+
+        <div class="card" style="border-left: 3px solid #0f172a;">
+          <div style="font-size: 7.5pt; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #64748b;">INTERNATIONAL</div>
+          <div style="font-size: 9.5pt; font-weight: 700; color: #0f172a; margin: 2px 0;">Saudi Arabia &amp; Gulf</div>
+          <p style="font-size: 8pt; color: #475569;">Specialized spatial trusses and space frame canopies in Riyadh &amp; GCC.</p>
+        </div>
+      </div>
+
+      <!-- Key Clients Grid -->
+      <div style="margin-bottom: 18px;">
+        <h3 style="font-size: 10.5pt; margin-bottom: 10px;">Select Corporate &amp; Institutional Clientele</h3>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
+          <div class="card" style="text-align: center; padding: 10px;"><strong style="font-size: 8.5pt;">Landmark Builders</strong></div>
+          <div class="card" style="text-align: center; padding: 10px;"><strong style="font-size: 8.5pt;">Pentium Constructions</strong></div>
+          <div class="card" style="text-align: center; padding: 10px;"><strong style="font-size: 8.5pt;">Good Earth</strong></div>
+          <div class="card" style="text-align: center; padding: 10px;"><strong style="font-size: 8.5pt;">Mellow Builders</strong></div>
+          <div class="card" style="text-align: center; padding: 10px;"><strong style="font-size: 8.5pt;">Space Art Builders</strong></div>
+          <div class="card" style="text-align: center; padding: 10px;"><strong style="font-size: 8.5pt;">Elixir Properties</strong></div>
+          <div class="card" style="text-align: center; padding: 10px;"><strong style="font-size: 8.5pt;">Daliya Homes</strong></div>
+          <div class="card" style="text-align: center; padding: 10px;"><strong style="font-size: 8.5pt;">KHRWS Kerala</strong></div>
+          <div class="card" style="text-align: center; padding: 10px;"><strong style="font-size: 8.5pt;">Konkan Railway Corp.</strong></div>
+          <div class="card" style="text-align: center; padding: 10px;"><strong style="font-size: 8.5pt;">Silpi Architects</strong></div>
+          <div class="card" style="text-align: center; padding: 10px;"><strong style="font-size: 8.5pt;">Silver Castle Homes</strong></div>
+          <div class="card" style="text-align: center; padding: 10px;"><strong style="font-size: 8.5pt;">Nate Builders</strong></div>
+        </div>
+      </div>
+
+      <!-- Contact Box -->
+      <div style="background: #0f172a; color: #ffffff; border-radius: 8px; padding: 18px 22px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.15); padding-bottom: 12px; margin-bottom: 12px;">
+          <div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 8pt; color: #94a3b8; text-transform: uppercase;">
+              CONSULTANCY HEAD OFFICE
+            </div>
+            <h3 style="color: #ffffff; font-size: 13pt;">Jithesh Engineers Pvt. Ltd.</h3>
+          </div>
+          <div style="text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 8.5pt; color: #cbd5e1;">
+            STRUCTURAL CONSULTANCY INQUIRIES
+          </div>
+        </div>
+
+        <div class="grid-3" style="gap: 12px; font-size: 8.5pt;">
+          <div>
+            <div style="color: #94a3b8; font-family: 'JetBrains Mono', monospace; font-size: 7.5pt; text-transform: uppercase;">ADDRESS</div>
+            <div style="margin-top: 3px; color: #e2e8f0;">Karaparamba, Kozhikode<br>Kerala, India — 673010</div>
+          </div>
+          <div>
+            <div style="color: #94a3b8; font-family: 'JetBrains Mono', monospace; font-size: 7.5pt; text-transform: uppercase;">COMMUNICATIONS</div>
+            <div style="margin-top: 3px; color: #e2e8f0;">Phone: +91 98765 43210<br>Email: info@jitheshengineers.com</div>
+          </div>
+          <div>
+            <div style="color: #94a3b8; font-family: 'JetBrains Mono', monospace; font-size: 7.5pt; text-transform: uppercase;">DIGITAL &amp; WEB</div>
+            <div style="margin-top: 3px; color: #e2e8f0;">Web: www.jitheshengineers.com<br>Mon – Sat: 8:00 AM – 6:00 PM</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="doc-footer">
+      <div>Jithesh Engineers Pvt. Ltd. • Corporate Qualifications</div>
+      <div>Page 04 of 04</div>
+    </div>
+  </div>
+
+</body>
+</html>
