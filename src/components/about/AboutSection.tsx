@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Container } from '@/components/common/Container';
 import { COMPANY_INFO } from '@/data/navigation';
 import { CheckCircle2, Award, Shield, ArrowRight, Quote, X, ExternalLink, FileDown } from 'lucide-react';
@@ -9,6 +10,8 @@ import { getLenis } from '@/lib/lenis';
 const FOUNDER_PHOTO = assetUrl('/real-assets/director.webp');
 const CERTIFICATE_IMAGE = assetUrl('/real-assets/certificate_02.webp');
 const PAPER_CUT_IMAGE = assetUrl('/real-assets/paper_cut_01.webp');
+const CERTIFICATE_THUMB = assetUrl('/real-assets/certificate_02_thumb.webp');
+const PAPER_CUT_THUMB = assetUrl('/real-assets/paper_cut_01_thumb.webp');
 
 export const AboutSection: React.FC = () => {
   const [activeAwardModal, setActiveAwardModal] = useState<{ title: string; image: string } | null>(null);
@@ -23,13 +26,25 @@ export const AboutSection: React.FC = () => {
       window.addEventListener('keydown', handleKeyDown);
       const lenis = getLenis();
       lenis?.stop();
-      const prevOverflow = document.body.style.overflow;
+      const prevBodyOverflow = document.body.style.overflow;
+      const prevHtmlOverflow = document.documentElement.style.overflow;
       document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+
+      const preventTouchScroll = (e: TouchEvent) => {
+        const target = e.target as HTMLElement | null;
+        if (!target?.closest('[data-modal-scrollable]')) {
+          e.preventDefault();
+        }
+      };
+      window.addEventListener('touchmove', preventTouchScroll, { passive: false });
 
       return () => {
         window.removeEventListener('keydown', handleKeyDown);
+        window.removeEventListener('touchmove', preventTouchScroll);
         lenis?.start();
-        document.body.style.overflow = prevOverflow;
+        document.body.style.overflow = prevBodyOverflow;
+        document.documentElement.style.overflow = prevHtmlOverflow;
       };
     }
   }, [activeAwardModal]);
@@ -86,7 +101,7 @@ export const AboutSection: React.FC = () => {
                   className="flex items-center gap-3 p-3 rounded-xl border border-slate-200 bg-white hover:border-slate-400 hover:shadow-sm transition-all text-left group"
                 >
                   <img
-                    src={CERTIFICATE_IMAGE}
+                    src={CERTIFICATE_THUMB}
                     alt="Fastest Growing Indian Company Excellence Award"
                     width="48"
                     height="48"
@@ -110,7 +125,7 @@ export const AboutSection: React.FC = () => {
                   className="flex items-center gap-3 p-3 rounded-xl border border-slate-200 bg-white hover:border-slate-400 hover:shadow-sm transition-all text-left group"
                 >
                   <img
-                    src={PAPER_CUT_IMAGE}
+                    src={PAPER_CUT_THUMB}
                     alt="SiliconIndia 10 Most Promising Engineering Consultants"
                     width="48"
                     height="48"
@@ -219,42 +234,48 @@ export const AboutSection: React.FC = () => {
       </Container>
 
       {/* Award Modal Lightbox */}
-      {activeAwardModal && (
-        <div
-          className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4"
-          onClick={() => setActiveAwardModal(null)}
-          data-lenis-prevent
-        >
+      {activeAwardModal &&
+        typeof document !== 'undefined' &&
+        createPortal(
           <div
-            className="bg-white rounded-2xl max-w-2xl w-full p-4 sm:p-6 shadow-2xl relative animate-in fade-in zoom-in-95 duration-200"
-            onClick={(e) => e.stopPropagation()}
+            className="fixed inset-0 z-[100] bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6 select-none overflow-y-auto"
+            onClick={() => setActiveAwardModal(null)}
             data-lenis-prevent
           >
-            <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-200">
-              <h4 className="text-sm sm:text-base font-bold text-slate-900 truncate pr-4">
-                {activeAwardModal.title}
-              </h4>
-              <button
-                type="button"
-                onClick={() => setActiveAwardModal(null)}
-                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-colors"
-                aria-label="Close modal"
+            <div
+              className="bg-white rounded-2xl max-w-lg sm:max-w-xl w-full p-4 sm:p-5 shadow-2xl relative animate-in fade-in zoom-in-95 duration-200 flex flex-col max-h-[76vh] my-auto border border-slate-200/80"
+              onClick={(e) => e.stopPropagation()}
+              data-lenis-prevent
+            >
+              <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-200 shrink-0">
+                <h3 className="text-xs sm:text-sm font-bold text-slate-900 truncate pr-3">
+                  {activeAwardModal.title}
+                </h3>
+                <button
+                  type="button"
+                  onClick={() => setActiveAwardModal(null)}
+                  className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-colors cursor-pointer shrink-0"
+                  aria-label="Close modal"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+              <div
+                className="overflow-hidden rounded-xl border border-slate-200 bg-slate-900/5 flex items-center justify-center p-2 flex-1 max-h-[60vh]"
+                data-modal-scrollable
               >
-                <X className="w-4 h-4" />
-              </button>
+                <img
+                  src={activeAwardModal.image}
+                  alt={activeAwardModal.title}
+                  className="w-auto h-auto max-h-[56vh] max-w-full object-contain rounded-lg shadow-sm"
+                  loading="eager"
+                  decoding="sync"
+                />
+              </div>
             </div>
-            <div className="overflow-hidden rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-center max-h-[70vh]">
-              <img
-                src={activeAwardModal.image}
-                alt={activeAwardModal.title}
-                className="max-h-[70vh] w-auto object-contain"
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
-          </div>
-        </div>
-      )}
+          </div>,
+          document.body
+        )}
     </section>
   );
 };

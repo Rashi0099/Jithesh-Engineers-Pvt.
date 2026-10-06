@@ -72,11 +72,11 @@ export const ServiceCardsRow: React.FC = () => {
       const imgEl = cardEl.querySelector('img') as HTMLElement | null;
 
       if (glowBorder) {
-        glowBorder.style.opacity = `${Math.max(0, 1 - absDiff * 2.2)}`;
+        glowBorder.style.opacity = `${Math.max(0, 1 - absDiff * 1.8)}`;
       }
       if (yellowBtn) {
-        yellowBtn.style.opacity = `${Math.max(0, 1 - absDiff * 2.5)}`;
-        yellowBtn.style.transform = `scale(${Math.max(0.6, 1 - absDiff * 0.5)})`;
+        yellowBtn.style.opacity = `${Math.max(0, 1 - absDiff * 1.8)}`;
+        yellowBtn.style.transform = `scale(${Math.max(0.65, 1 - absDiff * 0.35)})`;
       }
       if (imgEl) {
         imgEl.style.filter = isCenter
@@ -86,14 +86,15 @@ export const ServiceCardsRow: React.FC = () => {
     });
   }, []);
 
-  // Smoothly animate to target card index with ultra-fast, snappy response
+  // Smoothly animate to target card index (silky smooth on desktop, snappy on mobile)
   const goToCard = useCallback((targetIdx: number, customDuration?: number) => {
     const clamped = Math.max(0, Math.min(TOTAL_CARDS - 1, targetIdx));
     targetPosRef.current = clamped;
     setActiveInt(clamped);
 
     const isMob = typeof window !== 'undefined' && window.innerWidth < 768;
-    const durSec = customDuration !== undefined ? customDuration : (isMob ? 0.22 : 0.40);
+    const defaultDur = isMob ? 0.22 : 0.52;
+    const durSec = customDuration !== undefined ? customDuration : defaultDur;
     const durMs = durSec * 1000;
 
     stopAnimation();
@@ -110,8 +111,8 @@ export const ServiceCardsRow: React.FC = () => {
     const tick = (now: number) => {
       const elapsed = now - startTime;
       const progress = Math.min(1, elapsed / durMs);
-      // power2.out (easeOutQuad): 1 - (1 - t)^2
-      const ease = 1 - (1 - progress) * (1 - progress);
+      // Silky smooth easeOutCubic: 1 - (1 - t)^3 for luxurious glide
+      const ease = 1 - Math.pow(1 - progress, 3);
       const current = startPos + change * ease;
       animPosRef.current.pos = current;
       setActiveIndexFloat(current);
@@ -133,6 +134,7 @@ export const ServiceCardsRow: React.FC = () => {
 
     let deltaAcc = 0;
     let accTimer: number;
+    let lastWheelTime = 0;
 
     const onWheel = (e: WheelEvent) => {
       // Support both horizontal trackpad swipes and vertical mouse wheel
@@ -143,6 +145,7 @@ export const ServiceCardsRow: React.FC = () => {
       if (Math.abs(delta) < 4) return;
 
       const current = targetPosRef.current;
+      const now = Date.now();
 
       if (delta > 0) {
         // User wants to go forward / right
@@ -151,9 +154,10 @@ export const ServiceCardsRow: React.FC = () => {
           e.stopPropagation();
 
           deltaAcc += delta;
-          if (deltaAcc > 52) {
+          if (deltaAcc > 42 && now - lastWheelTime > 280) {
             deltaAcc = 0;
-            goToCard(current + 1);
+            lastWheelTime = now;
+            goToCard(current + 1, 0.52);
           }
         }
         // At Card 06 (last card): allow natural page scroll down to next section
@@ -164,9 +168,10 @@ export const ServiceCardsRow: React.FC = () => {
           e.stopPropagation();
 
           deltaAcc += delta;
-          if (deltaAcc < -52) {
+          if (deltaAcc < -42 && now - lastWheelTime > 280) {
             deltaAcc = 0;
-            goToCard(current - 1);
+            lastWheelTime = now;
+            goToCard(current - 1, 0.52);
           }
         }
         // At Card 01 (first card): allow natural page scroll up to hero
@@ -176,7 +181,7 @@ export const ServiceCardsRow: React.FC = () => {
       clearTimeout(accTimer);
       accTimer = window.setTimeout(() => {
         deltaAcc = 0;
-      }, 300);
+      }, 250);
     };
 
     // Touch tracking specifically tuned for Android and iOS
@@ -324,13 +329,15 @@ export const ServiceCardsRow: React.FC = () => {
       const elapsed = Math.max(1, Date.now() - mouseStartTime);
       const velocity = Math.abs(mouseDragDistance) / elapsed;
       const threshold = velocity > 0.2 ? 16 : 26;
+      const isMob = window.innerWidth < 768;
+      const slideDuration = isMob ? 0.22 : 0.48;
 
       if (mouseDragDistance < -threshold) {
-        goToCard(targetPosRef.current + 1, 0.28);
+        goToCard(targetPosRef.current + 1, slideDuration);
       } else if (mouseDragDistance > threshold) {
-        goToCard(targetPosRef.current - 1, 0.28);
+        goToCard(targetPosRef.current - 1, slideDuration);
       } else {
-        goToCard(targetPosRef.current, 0.22);
+        goToCard(targetPosRef.current, isMob ? 0.20 : 0.42);
       }
 
       setTimeout(() => {
@@ -378,11 +385,11 @@ export const ServiceCardsRow: React.FC = () => {
   }, [goToCard, applyCardTransforms]);
 
   const handlePrev = () => {
-    goToCard(activeInt - 1, 0.22);
+    goToCard(activeInt - 1);
   };
 
   const handleNext = () => {
-    goToCard(activeInt + 1, 0.22);
+    goToCard(activeInt + 1);
   };
 
   return (
@@ -452,7 +459,7 @@ export const ServiceCardsRow: React.FC = () => {
                       if (isNearCenter) {
                         scrollToSection('services');
                       } else {
-                        goToCard(idx, 0.22);
+                        goToCard(idx);
                       }
                     }}
                     className="absolute w-[200px] sm:w-[225px] lg:w-[240px] h-[245px] sm:h-[260px] lg:h-[270px] rounded-2xl overflow-hidden bg-slate-900 text-left transition-shadow duration-300 cursor-pointer shadow-xl will-change-transform border border-white/15 select-none touch-pan-y"
@@ -526,7 +533,7 @@ export const ServiceCardsRow: React.FC = () => {
               <button
                 key={i}
                 type="button"
-                onClick={() => goToCard(i, 0.22)}
+                onClick={() => goToCard(i)}
                 aria-label={`Go to service ${i + 1}`}
                 className="w-7 h-7 flex items-center justify-center p-0 cursor-pointer"
               >

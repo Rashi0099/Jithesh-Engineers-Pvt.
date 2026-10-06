@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { X, FileText, Download, ExternalLink, CheckCircle2 } from 'lucide-react';
 import { assetUrl } from '@/lib/assets';
 import { getLenis } from '@/lib/lenis';
@@ -19,13 +20,16 @@ export const BrochureModal: React.FC<BrochureModalProps> = ({ isOpen, onClose })
       window.addEventListener('keydown', handleKeyDown);
       const lenis = getLenis();
       lenis?.stop();
-      const prevOverflow = document.body.style.overflow;
+      const prevBodyOverflow = document.body.style.overflow;
+      const prevHtmlOverflow = document.documentElement.style.overflow;
       document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
 
       return () => {
         window.removeEventListener('keydown', handleKeyDown);
         lenis?.start();
-        document.body.style.overflow = prevOverflow;
+        document.body.style.overflow = prevBodyOverflow;
+        document.documentElement.style.overflow = prevHtmlOverflow;
       };
     }
   }, [isOpen, onClose]);
@@ -45,14 +49,22 @@ export const BrochureModal: React.FC<BrochureModalProps> = ({ isOpen, onClose })
     window.open(assetUrl('/corporate-profile-print.html'), '_blank');
   };
 
-  return (
+  if (typeof document === 'undefined') return null;
+
+  return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-slate-950/75 backdrop-blur-sm animate-in fade-in duration-200 select-none"
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-slate-950/75 backdrop-blur-sm animate-in fade-in duration-200 select-none overflow-y-auto"
       onClick={onClose}
+      onWheel={(e) => {
+        if (e.target === e.currentTarget) e.preventDefault();
+      }}
+      onTouchMove={(e) => {
+        if (e.target === e.currentTarget) e.preventDefault();
+      }}
       data-lenis-prevent
     >
       <div
-        className="relative w-full max-w-md bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-slate-200 overflow-hidden animate-in zoom-in-95 duration-200"
+        className="relative w-full max-w-md bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-slate-200 overflow-hidden animate-in zoom-in-95 duration-200 my-auto"
         onClick={(e) => e.stopPropagation()}
         data-lenis-prevent
       >
@@ -142,6 +154,7 @@ export const BrochureModal: React.FC<BrochureModalProps> = ({ isOpen, onClose })
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };

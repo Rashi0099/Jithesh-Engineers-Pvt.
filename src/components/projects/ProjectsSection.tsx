@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Container } from '@/components/common/Container';
 import { PROJECTS_DATA, ProjectItem } from '@/data/projects';
 import {
@@ -32,13 +33,25 @@ export const ProjectsSection: React.FC = () => {
       window.addEventListener('keydown', handleKeyDown);
       const lenis = getLenis();
       lenis?.stop();
-      const originalOverflow = document.body.style.overflow;
+      const originalBodyOverflow = document.body.style.overflow;
+      const originalHtmlOverflow = document.documentElement.style.overflow;
       document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+
+      const preventTouchScroll = (e: TouchEvent) => {
+        const target = e.target as HTMLElement | null;
+        if (!target?.closest('[data-modal-scrollable]')) {
+          e.preventDefault();
+        }
+      };
+      window.addEventListener('touchmove', preventTouchScroll, { passive: false });
 
       return () => {
         window.removeEventListener('keydown', handleKeyDown);
+        window.removeEventListener('touchmove', preventTouchScroll);
         lenis?.start();
-        document.body.style.overflow = originalOverflow;
+        document.body.style.overflow = originalBodyOverflow;
+        document.documentElement.style.overflow = originalHtmlOverflow;
       };
     }
   }, [activeModalProject]);
@@ -150,109 +163,122 @@ export const ProjectsSection: React.FC = () => {
         )}
 
         {/* ─── INTERACTIVE PHOTO LIGHTBOX MODAL ────────────────────────────── */}
-        {activeModalProject && (
-          <div
-            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200 select-none"
-            onClick={() => setActiveModalProject(null)}
-            data-lenis-prevent
-          >
+        {activeModalProject &&
+          typeof document !== 'undefined' &&
+          createPortal(
             <div
-              className="relative w-full max-w-xl lg:max-w-2xl max-h-[88vh] sm:max-h-[84vh] flex flex-col bg-white rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border border-slate-200 animate-in zoom-in-95 duration-200"
-              onClick={(e) => e.stopPropagation()}
+              className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-5 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200 select-none overflow-y-auto"
+              onClick={() => setActiveModalProject(null)}
+              onWheel={(e) => {
+                if (e.target === e.currentTarget) e.preventDefault();
+              }}
+              onTouchMove={(e) => {
+                if (e.target === e.currentTarget) e.preventDefault();
+              }}
               data-lenis-prevent
             >
-              {/* Close Button */}
-              <button
-                type="button"
-                onClick={() => setActiveModalProject(null)}
-                className="absolute top-3.5 right-3.5 z-30 w-8 h-8 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center transition-all backdrop-blur-md shadow-md hover:scale-105 active:scale-95"
-                aria-label="Close modal"
-              >
-                <X className="w-4 h-4" />
-              </button>
-
-              {/* Compact Cinematic Image Header */}
-              <div className="relative h-44 sm:h-52 md:h-56 shrink-0 w-full bg-slate-950 overflow-hidden">
-                <img
-                  src={activeModalProject.image}
-                  alt={activeModalProject.title}
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                  decoding="async"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/40 to-black/20" />
-
-                <div className="absolute bottom-3 sm:bottom-4 left-4 sm:left-6 right-4 sm:right-6 text-white">
-                  <span className="text-[10px] sm:text-[11px] font-mono font-bold uppercase tracking-wider text-blue-300">
-                    {activeModalProject.category}
-                  </span>
-                  <h3 className="text-lg sm:text-2xl font-black text-white mt-0.5 leading-tight">
-                    {activeModalProject.title}
-                  </h3>
-                  <div className="flex items-center gap-2 text-[11px] sm:text-xs text-slate-300 mt-1">
-                    <MapPin className="w-3.5 h-3.5 text-brand-accent shrink-0" />
-                    <span>{activeModalProject.location}</span>
-                    {activeModalProject.year && (
-                      <>
-                        <span className="text-slate-500">•</span>
-                        <Calendar className="w-3.5 h-3.5 text-brand-accent shrink-0" />
-                        <span>{activeModalProject.year}</span>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              {/* Scrollable Modal Body Info */}
               <div
-                className="overflow-y-auto overscroll-contain p-4 sm:p-5 space-y-3.5 sm:space-y-4"
+                className="relative w-full max-w-xl lg:max-w-2xl max-h-[88vh] sm:max-h-[84vh] flex flex-col bg-white rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border border-slate-200 animate-in zoom-in-95 duration-200 my-auto"
+                onClick={(e) => e.stopPropagation()}
                 data-lenis-prevent
               >
-                {activeModalProject.scope && (
-                  <div className="p-3 sm:p-3.5 rounded-xl bg-slate-50 border border-slate-200/90 flex items-start gap-3">
-                    <div className="w-7 h-7 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center text-brand-navy shrink-0 mt-0.5">
-                      <Layers className="w-4 h-4 text-brand-accent" />
-                    </div>
-                    <div>
-                      <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-brand-navy block">
-                        Structural Engineering Scope
-                      </span>
-                      <p className="text-xs sm:text-sm font-semibold text-slate-800 mt-0.5">
-                        {activeModalProject.scope}
-                      </p>
+                {/* Close Button */}
+                <button
+                  type="button"
+                  onClick={() => setActiveModalProject(null)}
+                  className="absolute top-3.5 right-3.5 z-30 w-8 h-8 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center transition-all backdrop-blur-md shadow-md hover:scale-105 active:scale-95 cursor-pointer"
+                  aria-label="Close modal"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+
+                {/* Cinematic Image Header with enhanced height */}
+                <div className="relative h-60 sm:h-72 md:h-80 shrink-0 w-full bg-slate-950 overflow-hidden">
+                  <img
+                    src={activeModalProject.image}
+                    alt={activeModalProject.title}
+                    width="800"
+                    height="450"
+                    className="w-full h-full object-cover object-center"
+                    loading="eager"
+                    decoding="sync"
+                  />
+                  {/* Subtle gradient focused only at bottom for text readability */}
+                  <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent pointer-events-none" />
+
+                  <div className="absolute bottom-3.5 sm:bottom-4 left-4 sm:left-6 right-4 sm:right-6 text-white">
+                    <span className="text-[10px] sm:text-[11px] font-mono font-bold uppercase tracking-wider text-blue-300">
+                      {activeModalProject.category}
+                    </span>
+                    <h3 className="text-lg sm:text-2xl font-black text-white mt-0.5 leading-tight">
+                      {activeModalProject.title}
+                    </h3>
+                    <div className="flex items-center gap-2 text-[11px] sm:text-xs text-slate-300 mt-1">
+                      <MapPin className="w-3.5 h-3.5 text-brand-accent shrink-0" />
+                      <span>{activeModalProject.location}</span>
+                      {activeModalProject.year && (
+                        <>
+                          <span className="text-slate-500">•</span>
+                          <Calendar className="w-3.5 h-3.5 text-brand-accent shrink-0" />
+                          <span>{activeModalProject.year}</span>
+                        </>
+                      )}
                     </div>
                   </div>
-                )}
-
-                <div>
-                  <h4 className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-500 mb-1">
-                    Project Overview
-                  </h4>
-                  <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
-                    {activeModalProject.description}
-                  </p>
                 </div>
 
-                <div className="pt-3 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3">
-                  <div className="text-[11px] text-slate-500 font-mono text-center sm:text-left">
-                    IS & International Structural Standards Compliant
+                {/* Scrollable Modal Body Info */}
+                <div
+                  className="overflow-y-auto overscroll-contain p-4 sm:p-5 space-y-3.5 sm:space-y-4 flex-1"
+                  data-lenis-prevent
+                  data-modal-scrollable
+                >
+                  {activeModalProject.scope && (
+                    <div className="p-3 sm:p-3.5 rounded-xl bg-slate-50 border border-slate-200/90 flex items-start gap-3">
+                      <div className="w-7 h-7 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center text-brand-navy shrink-0 mt-0.5">
+                        <Layers className="w-4 h-4 text-brand-accent" />
+                      </div>
+                      <div>
+                        <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-brand-navy block">
+                          Structural Engineering Scope
+                        </span>
+                        <p className="text-xs sm:text-sm font-semibold text-slate-800 mt-0.5">
+                          {activeModalProject.scope}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+
+                  <div>
+                    <h4 className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-500 mb-1">
+                      Project Overview
+                    </h4>
+                    <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                      {activeModalProject.description}
+                    </p>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setActiveModalProject(null);
-                      scrollToSection('contact');
-                    }}
-                    className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-2 sm:py-2.5 rounded-xl bg-brand-navy hover:bg-brand-blue text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm active:scale-95"
-                  >
-                    <span>Inquire for Similar Project</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
+
+                  <div className="pt-3 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3">
+                    <div className="text-[11px] text-slate-500 font-mono text-center sm:text-left">
+                      IS & International Structural Standards Compliant
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setActiveModalProject(null);
+                        scrollToSection('contact');
+                      }}
+                      className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-2 sm:py-2.5 rounded-xl bg-brand-navy hover:bg-brand-blue text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm active:scale-95 cursor-pointer"
+                    >
+                      <span>Inquire for Similar Project</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-        )}
+            </div>,
+            document.body
+          )}
       </Container>
     </section>
   );
