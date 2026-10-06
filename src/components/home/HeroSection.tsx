@@ -123,9 +123,9 @@ export const HeroSection: React.FC = () => {
         <Container size="xl">
           <div className="max-w-3xl">
             {/* Understated Minimalist Badge */}
-            <div className="inline-flex items-center gap-2 px-3 sm:px-3.5 py-1.5 rounded-md bg-white/[0.08] backdrop-blur-md border border-white/15 text-slate-300 text-[11px] sm:text-xs font-mono tracking-wider uppercase mb-5 sm:mb-6 max-w-full truncate">
+            <div className="inline-flex items-center gap-2 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-md bg-white/[0.08] backdrop-blur-md border border-white/15 text-slate-300 text-[10px] sm:text-xs font-mono tracking-wider uppercase mb-5 sm:mb-6 max-w-full">
               <span className="w-1.5 h-1.5 rounded-full bg-slate-400 shrink-0" />
-              <span className="truncate">{slide.badge}</span>
+              <span>{slide.badge}</span>
             </div>
 
             {/* Clean, Elegant Headline */}

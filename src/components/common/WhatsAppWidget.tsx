@@ -18,9 +18,9 @@ export const WhatsAppWidget: React.FC<WhatsAppWidgetProps> = ({
 
   return (
     <div className="fixed bottom-5 right-5 sm:bottom-6 sm:right-6 z-40 flex flex-col items-end gap-2 print:hidden select-none">
-      {/* Tooltip Bubble */}
+      {/* Tooltip Bubble (hidden on small mobile screens to prevent obscuring card content) */}
       {showTooltip && (
-        <div className="flex items-center gap-2 bg-white text-slate-800 text-xs font-medium py-2 px-3.5 rounded-2xl shadow-xl border border-slate-200/80 animate-in fade-in slide-in-from-bottom-2 duration-300">
+        <div className="hidden sm:flex items-center gap-2 bg-white text-slate-800 text-xs font-medium py-2 px-3.5 rounded-2xl shadow-xl border border-slate-200/80 animate-in fade-in slide-in-from-bottom-2 duration-300">
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
             <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />

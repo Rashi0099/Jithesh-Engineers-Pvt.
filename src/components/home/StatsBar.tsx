@@ -37,29 +37,29 @@ export const StatsBar: React.FC = () => {
   return (
     <section className="bg-white border-y border-slate-200/80 relative z-20">
       <Container size="xl">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-slate-200/80">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-px bg-slate-200/80">
           {STATS.map(({ icon: Icon, value, unit, label, detail }) => (
             <div
               key={label}
-              className="group p-5 sm:p-6 lg:p-7 hover:bg-slate-50/60 transition-all duration-300 flex flex-col justify-between"
+              className="bg-white group p-3.5 sm:p-6 lg:p-7 hover:bg-slate-50/80 transition-all duration-300 flex flex-col justify-between"
             >
-              <div className="flex items-center justify-between mb-3">
-                <div className="w-10 h-10 rounded-xl bg-slate-100 border border-slate-200/80 flex items-center justify-center text-slate-800 group-hover:bg-slate-900 group-hover:text-white transition-colors duration-300 shadow-sm">
-                  <Icon className="w-4 h-4" />
+              <div className="flex items-center justify-between mb-2 sm:mb-3">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-slate-100 border border-slate-200/80 flex items-center justify-center text-slate-800 group-hover:bg-slate-900 group-hover:text-white transition-colors duration-300 shadow-sm">
+                  <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 </div>
-                <span className="text-[10px] font-mono font-semibold uppercase tracking-widest text-slate-400 group-hover:text-slate-600 transition-colors">
+                <span className="text-[9px] sm:text-[10px] font-mono font-semibold uppercase tracking-wider text-slate-400 group-hover:text-slate-600 transition-colors">
                   {unit}
                 </span>
               </div>
 
               <div>
-                <div className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight leading-tight">
+                <div className="text-base sm:text-xl lg:text-2xl font-extrabold text-slate-900 tracking-tight leading-tight">
                   {value}
                 </div>
-                <div className="text-xs font-semibold text-slate-700 mt-1">
+                <div className="text-[11px] sm:text-xs font-semibold text-slate-700 mt-0.5 sm:mt-1 truncate sm:whitespace-normal">
                   {label}
                 </div>
-                <div className="text-[11px] text-slate-500 mt-0.5 leading-snug">
+                <div className="text-[10px] sm:text-[11px] text-slate-500 mt-0.5 leading-snug line-clamp-2 sm:line-clamp-none">
                   {detail}
                 </div>
               </div>

@@ -5,10 +5,21 @@ import { scrollToSection } from '@/hooks/useScrollSpy';
 
 export const OurReachSection: React.FC = () => {
   return (
-    <section id="reach" className="py-20 bg-white relative">
+    <section id="reach" className="py-12 sm:py-20 bg-white relative">
       <Container size="xl">
-        {/* Wide Architectural Construction Photo Banner (ON TOP) */}
-        <div className="relative rounded-2xl overflow-hidden aspect-[21/9] min-h-[260px] sm:min-h-[300px] shadow-lg group mb-8 sm:mb-10">
+        {/* Section Header */}
+        <div className="mb-6 sm:mb-8">
+          <span className="text-xs font-mono uppercase tracking-[0.2em] text-slate-500 font-semibold block mb-1">
+            CROSS-BORDER CONSULTANCY
+          </span>
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">
+            Our National & Global Reach
+          </h2>
+          <div className="w-16 h-1 bg-slate-900 mt-2.5 rounded-full" />
+        </div>
+
+        {/* Wide Architectural Construction Photo Banner */}
+        <div className="relative rounded-2xl overflow-hidden min-h-[290px] sm:min-h-[300px] md:aspect-[21/9] shadow-lg group mb-6 sm:mb-8 bg-slate-950">
           <img
             src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=1200&q=75&auto=format&fit=crop"
             alt="Cross-Border Engineering Excellence"
@@ -16,22 +27,22 @@ export const OurReachSection: React.FC = () => {
             loading="lazy"
             decoding="async"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-950/65 to-black/25 flex items-center p-8 sm:p-12">
-            <div className="max-w-2xl text-white space-y-3">
-              <span className="text-xs font-mono uppercase tracking-[0.2em] text-slate-300 font-semibold block">
+          <div className="absolute inset-0 bg-gradient-to-t sm:bg-gradient-to-r from-slate-950/95 via-slate-950/80 to-slate-950/40 flex items-center p-5 sm:p-10 lg:p-12">
+            <div className="max-w-2xl text-white space-y-2.5 sm:space-y-3">
+              <span className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.2em] text-slate-300 font-semibold block">
                 CROSS-BORDER ENGINEERING EXCELLENCE
               </span>
-              <h4 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white leading-tight tracking-tight">
+              <h4 className="text-lg sm:text-2xl lg:text-3xl font-extrabold text-white leading-snug sm:leading-tight tracking-tight break-words">
                 Delivering safe, durable, and architecturally expressive structures worldwide.
               </h4>
               <div className="pt-2">
                 <button
                   type="button"
                   onClick={() => scrollToSection('contact')}
-                  className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-200 hover:text-white transition-colors"
+                  className="inline-flex items-center gap-2 text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-slate-200 hover:text-white transition-colors"
                 >
                   <span>DISCUSS YOUR INTERNATIONAL PROJECT</span>
-                  <ExternalLink className="w-3.5 h-3.5" />
+                  <ExternalLink className="w-3.5 h-3.5 shrink-0" />
                 </button>
               </div>
             </div>
