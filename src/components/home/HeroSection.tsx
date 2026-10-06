@@ -1,122 +1,32 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { ArrowRight, ChevronLeft, ChevronRight, MapPin } from 'lucide-react';
+import React from 'react';
+import { ArrowRight } from 'lucide-react';
 import { Container } from '@/components/common/Container';
 import { scrollToSection } from '@/hooks/useScrollSpy';
-
-interface HeroSlide {
-  id: number;
-  bg: string;
-  badge: string;
-  headlinePrefix: string;
-  headlineHighlight: string;
-  sub: string;
-  featured: {
-    tag: string;
-    title: string;
-    location: string;
-    thumb: string;
-  };
-}
-
-const HERO_SLIDES: HeroSlide[] = [
-  {
-    id: 1,
-    bg: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1600&auto=format&fit=crop&q=80',
-    badge: 'Structural Engineering Consultancy • Est. 2008',
-    headlinePrefix: 'Engineering Structures for a',
-    headlineHighlight: 'Better Tomorrow.',
-    sub: 'Delivering precision structural design, advanced analysis, and BIM detailing across India and Saudi Arabia.',
-    featured: {
-      tag: 'Featured Project',
-      title: 'Pentium Eternia',
-      location: 'Karaparamba, Kozhikode',
-      thumb: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=240&auto=format&fit=crop&q=75',
-    },
-  },
-  {
-    id: 2,
-    bg: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=1600&auto=format&fit=crop&q=80',
-    badge: 'Structural Design & Detailing',
-    headlinePrefix: 'Precision & Technical Rigor in',
-    headlineHighlight: 'Every Blueprint.',
-    sub: 'From computational modeling and 3D BIM coordination to heavy steel fabrication drawings — comprehensive solutions under one roof.',
-    featured: {
-      tag: 'Commercial Landmark',
-      title: 'Business Complex',
-      location: 'Kozhikode, Kerala',
-      thumb: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=240&auto=format&fit=crop&q=75',
-    },
-  },
-  {
-    id: 3,
-    bg: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=1600&auto=format&fit=crop&q=80',
-    badge: 'International Reach • India & Saudi Arabia',
-    headlinePrefix: 'Built with Integrity.',
-    headlineHighlight: 'Trusted Regionally.',
-    sub: 'With projects spanning Kerala, multiple Indian states, and Saudi Arabia, we bring world-class structural engineering to every site.',
-    featured: {
-      tag: 'Specialized Structure',
-      title: 'Space Frame Canopy',
-      location: 'Riyadh, Saudi Arabia',
-      thumb: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?w=240&auto=format&fit=crop&q=75',
-    },
-  },
-];
+import { assetUrl } from '@/lib/assets';
 
 export const HeroSection: React.FC = () => {
-  const [current, setCurrent] = useState(0);
-  const [animating, setAnimating] = useState(false);
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
-  // Preload secondary slides in idle time
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      HERO_SLIDES.slice(1).forEach((s) => {
-        const img = new Image();
-        img.src = s.bg;
-      });
-    }, 1200);
-    return () => clearTimeout(timer);
-  }, []);
-
-  const goTo = (idx: number) => {
-    if (animating) return;
-    setAnimating(true);
-    setTimeout(() => {
-      setCurrent(idx);
-      setAnimating(false);
-    }, 280);
-  };
-
-  const prev = () => goTo((current - 1 + HERO_SLIDES.length) % HERO_SLIDES.length);
-  const next = () => goTo((current + 1) % HERO_SLIDES.length);
-
-  useEffect(() => {
-    intervalRef.current = setInterval(next, 6500);
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    };
-  }, [current]);
-
-  const slide = HERO_SLIDES[current];
-
   return (
-    <section id="home" className="relative w-full min-h-[680px] h-[100vh] max-h-[960px] overflow-hidden bg-slate-950 text-white flex flex-col justify-between">
-      {/* High-priority Architectural Hero Image */}
-      <img
-        src={slide.bg}
-        alt={`${slide.headlinePrefix} ${slide.headlineHighlight}`}
-        className={`absolute inset-0 w-full h-full object-cover transition-all duration-1000 transform ${
-          animating ? 'opacity-30 scale-102' : 'opacity-75 scale-100'
-        }`}
-        fetchPriority={current === 0 ? 'high' : 'auto'}
-        loading={current === 0 ? 'eager' : 'lazy'}
-        decoding={current === 0 ? 'sync' : 'async'}
-      />
+    <section
+      id="home"
+      className="relative w-full min-h-[640px] h-[100vh] max-h-[960px] overflow-hidden bg-slate-950 text-white flex flex-col justify-between"
+    >
+      {/* High-priority Architectural Hero Image (Single image, no carousel) */}
+      <picture className="absolute inset-0 w-full h-full">
+        <source srcSet={assetUrl('/hero-modern-house.webp')} type="image/webp" />
+        <img
+          src={assetUrl('/hero-modern-house.png')}
+          alt="Cinematic Modern Architectural Structure at Twilight"
+          className="w-full h-full object-cover object-[70%_center] md:object-center"
+          fetchPriority="high"
+          loading="eager"
+          decoding="sync"
+        />
+      </picture>
 
-      {/* Clean Architectural Vignette & Dark Overlay (No fake color blurs) */}
-      <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-950/65 to-slate-950/40" />
-      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-slate-950/50" />
+      {/* Clean Architectural Vignette & Dark Overlay for optimal text readability */}
+      <div className="absolute inset-0 bg-slate-950/35 md:bg-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-950/75 to-slate-950/35 md:from-slate-950/90 md:via-slate-950/55 md:to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-slate-950/50" />
 
       {/* Main Center Content */}
       <div className="relative z-10 my-auto pt-24 sm:pt-28 pb-8 sm:pb-10">
@@ -125,20 +35,20 @@ export const HeroSection: React.FC = () => {
             {/* Understated Minimalist Badge */}
             <div className="inline-flex items-center gap-2 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-md bg-white/[0.08] backdrop-blur-md border border-white/15 text-slate-300 text-[10px] sm:text-xs font-mono tracking-wider uppercase mb-5 sm:mb-6 max-w-full">
               <span className="w-1.5 h-1.5 rounded-full bg-slate-400 shrink-0" />
-              <span>{slide.badge}</span>
+              <span>Structural Engineering Consultancy • Est. 2008</span>
             </div>
 
             {/* Clean, Elegant Headline */}
             <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white mb-4 sm:mb-6 leading-[1.12] sm:leading-[1.1]">
-              <span className="block text-white">{slide.headlinePrefix}</span>
+              <span className="block text-white">Engineering Structures for a</span>
               <span className="block text-slate-200 font-extrabold">
-                {slide.headlineHighlight}
+                Better Tomorrow.
               </span>
             </h1>
 
             {/* Crisp Subtitle */}
             <p className="text-sm sm:text-base lg:text-lg text-slate-300 leading-relaxed max-w-xl mb-7 sm:mb-9 font-normal text-balance">
-              {slide.sub}
+              Delivering precision structural design, advanced analysis, and BIM detailing across India and Saudi Arabia.
             </p>
 
             {/* Minimalist Architectural Action Buttons */}
@@ -146,7 +56,7 @@ export const HeroSection: React.FC = () => {
               <button
                 type="button"
                 onClick={() => scrollToSection('projects')}
-                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-white text-slate-950 hover:bg-slate-100 font-semibold text-sm rounded-lg transition-all shadow-sm active:scale-95 group text-center"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-white text-slate-950 hover:bg-slate-100 font-semibold text-sm rounded-lg transition-all shadow-sm active:scale-95 group text-center cursor-pointer"
               >
                 <span>Explore Projects</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
@@ -155,7 +65,7 @@ export const HeroSection: React.FC = () => {
               <button
                 type="button"
                 onClick={() => scrollToSection('services')}
-                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-white/5 hover:bg-white/10 backdrop-blur-md border border-white/20 text-white font-medium text-sm rounded-lg transition-all active:scale-95 text-center"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-white/5 hover:bg-white/10 backdrop-blur-md border border-white/20 text-white font-medium text-sm rounded-lg transition-all active:scale-95 text-center cursor-pointer"
               >
                 <span>Our Services</span>
               </button>
@@ -164,79 +74,29 @@ export const HeroSection: React.FC = () => {
         </Container>
       </div>
 
-      {/* Bottom Bar: Clean Minimal Slide Controls & Featured Project Card */}
+      {/* Bottom Bar: Static Refined Status & Scroll Down Cue */}
       <div className="relative z-10 pb-6 sm:pb-8">
         <Container size="xl">
-          <div className="flex items-center justify-between gap-4 border-t border-white/15 pt-5 sm:pt-6">
+          <div className="flex items-center justify-between gap-4 border-t border-white/15 pt-5 sm:pt-6 pr-14 sm:pr-20 md:pr-24">
             
-            {/* Left: Minimal Slide Trackers */}
-            <div className="flex items-center gap-3 sm:gap-4">
-              <span className="text-xs font-mono font-medium text-slate-300 tracking-wider">
-                {String(current + 1).padStart(2, '0')}
+            {/* Left: Refined Architectural Status Badge */}
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+              <span className="text-[10.5px] sm:text-xs font-mono text-slate-300 tracking-wider uppercase">
+                Structural Consultants • ISO 9001:2015
               </span>
-              <div className="flex gap-1.5">
-                {HERO_SLIDES.map((_, i) => (
-                  <button
-                    key={i}
-                    type="button"
-                    onClick={() => goTo(i)}
-                    aria-label={`Go to slide ${i + 1}`}
-                    className={`h-0.5 rounded-full transition-all duration-300 ${
-                      i === current ? 'w-8 bg-white' : 'w-4 bg-white/30 hover:bg-white/60'
-                    }`}
-                  />
-                ))}
-              </div>
-              <span className="text-xs text-slate-500 font-mono">
-                / {String(HERO_SLIDES.length).padStart(2, '0')}
-              </span>
-
-              <div className="flex items-center gap-1.5 ml-4">
-                <button
-                  type="button"
-                  onClick={prev}
-                  aria-label="Previous slide"
-                  className="w-8 h-8 rounded-md border border-white/15 bg-white/5 hover:bg-white/15 flex items-center justify-center text-slate-300 hover:text-white transition-all active:scale-95"
-                >
-                  <ChevronLeft className="w-3.5 h-3.5" />
-                </button>
-                <button
-                  type="button"
-                  onClick={next}
-                  aria-label="Next slide"
-                  className="w-8 h-8 rounded-md border border-white/15 bg-white/5 hover:bg-white/15 flex items-center justify-center text-slate-300 hover:text-white transition-all active:scale-95"
-                >
-                  <ChevronRight className="w-3.5 h-3.5" />
-                </button>
-              </div>
             </div>
 
-            {/* Right: Featured Project Quick-Card (Architectural Glass) */}
+            {/* Right: Clean Scroll Down Cue */}
             <button
               type="button"
-              onClick={() => scrollToSection('projects')}
-              className="group hidden md:flex items-center gap-3 bg-white/[0.06] hover:bg-white/[0.12] backdrop-blur-md border border-white/15 rounded-xl p-2 pr-4 transition-all text-left shadow-sm"
+              onClick={() => scrollToSection('about')}
+              className="hidden sm:inline-flex items-center gap-2 text-xs font-mono text-slate-400 hover:text-white transition-colors cursor-pointer group"
             >
-              <img
-                src={slide.featured.thumb}
-                alt={slide.featured.title}
-                className="w-11 h-11 rounded-lg object-cover border border-white/10 shrink-0"
-              />
-              <div>
-                <div className="text-[10px] uppercase font-mono tracking-wider text-slate-400 font-medium">
-                  {slide.featured.tag}
-                </div>
-                <div className="text-sm font-semibold text-white group-hover:text-slate-200 transition-colors">
-                  {slide.featured.title}
-                </div>
-                <div className="text-[11px] text-slate-400 flex items-center gap-1">
-                  <MapPin className="w-3 h-3 text-slate-400" />
-                  <span>{slide.featured.location}</span>
-                </div>
-              </div>
-              <div className="w-7 h-7 rounded-md bg-white/10 group-hover:bg-white group-hover:text-slate-950 flex items-center justify-center text-slate-300 transition-all ml-2">
-                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
-              </div>
+              <span className="tracking-wider uppercase text-[11px]">Scroll to explore</span>
+              <span className="w-5 h-5 rounded-full border border-white/20 flex items-center justify-center group-hover:border-white group-hover:translate-y-0.5 transition-all">
+                <ArrowRight className="w-3 h-3 rotate-90 text-slate-300 group-hover:text-white" />
+              </span>
             </button>
 
           </div>
