@@ -222,7 +222,7 @@ export const ServiceCardsRow: React.FC = () => {
   return (
     <section
       ref={sectionRef}
-      className="relative bg-slate-950 text-white py-10 sm:py-14 lg:py-16 overflow-hidden z-10"
+      className="relative bg-slate-950 text-white pt-4 sm:pt-14 pb-10 sm:pb-14 lg:py-16 overflow-hidden z-10"
     >
       <div
         ref={containerRef}

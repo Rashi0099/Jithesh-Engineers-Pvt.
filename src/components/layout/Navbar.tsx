@@ -60,6 +60,11 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBrochure }) => {
           ? 'glass-nav border-b border-slate-200/90 shadow-md py-3'
           : 'bg-transparent py-4 sm:py-6'
       }`}
+      style={{
+        paddingTop: isDarkNav
+          ? 'max(0.75rem, calc(0.5rem + env(safe-area-inset-top, 0px)))'
+          : 'max(1rem, calc(0.75rem + env(safe-area-inset-top, 0px)))',
+      }}
     >
       <Container size="xl">
         <div className="flex items-center justify-between gap-3 sm:gap-4">

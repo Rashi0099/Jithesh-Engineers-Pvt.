@@ -8,7 +8,7 @@ export const HeroSection: React.FC = () => {
   return (
     <section
       id="home"
-      className="relative w-full min-h-[100svh] md:min-h-[600px] md:h-[100vh] md:max-h-[960px] overflow-hidden bg-slate-950 text-white flex flex-col justify-between"
+      className="relative w-full h-[100svh] min-h-[560px] md:min-h-[600px] md:h-[100vh] md:max-h-[960px] overflow-hidden bg-slate-950 text-white flex flex-col justify-between"
     >
       {/* High-priority Architectural Hero Image */}
       <picture className="absolute inset-0 w-full h-full">
@@ -27,11 +27,11 @@ export const HeroSection: React.FC = () => {
       <div className="absolute inset-0 bg-gradient-to-r from-slate-950/85 via-slate-950/50 to-transparent" />
       <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-slate-950/40" />
 
-      <div className="relative z-10 my-auto pt-24 sm:pt-28 md:pt-32 pb-4 md:pb-8">
+      <div className="relative z-10 my-auto pt-20 sm:pt-24 md:pt-32 pb-4 md:pb-8">
         <Container size="xl">
           <div className="max-w-2xl md:mb-[100px]">
             {/* Ultra-Modern, Elegant Architectural Headline */}
-            <h1 className="text-[30px] sm:text-[36px] md:text-5xl lg:text-6xl font-light tracking-tight text-white mb-5 sm:mb-6 leading-[1.14]">
+            <h1 className="text-[28px] sm:text-[34px] md:text-5xl lg:text-6xl font-light tracking-tight text-white mb-4 sm:mb-6 leading-[1.14]">
               Engineering Structures <br />
               <span className="font-bold text-white">for a Better Tomorrow.</span>
             </h1>
@@ -59,8 +59,11 @@ export const HeroSection: React.FC = () => {
         </Container>
       </div>
 
-      {/* Mobile-Only 2×2 Dark Glassmorphic Statistics Card (Anchored at Bottom of Mobile Viewport) */}
-      <div className="relative z-20 md:hidden pb-14 sm:pb-16 px-4">
+      {/* Mobile-Only 2×2 Dark Glassmorphic Statistics Card (Elevated higher on mobile) */}
+      <div
+        className="relative z-20 md:hidden pb-14 sm:pb-16 px-4"
+        style={{ paddingBottom: 'max(3.5rem, calc(3rem + env(safe-area-inset-bottom, 0px)))' }}
+      >
         <div className="pure-glass-card rounded-2xl p-3.5 text-white shadow-2xl">
           <div className="grid grid-cols-2 divide-x divide-white/15">
             {/* Left Column */}
