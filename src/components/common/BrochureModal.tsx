@@ -1,5 +1,5 @@
-import React from 'react';
-import { X, FileText, Download, Printer, CheckCircle, ExternalLink } from 'lucide-react';
+import React, { useEffect } from 'react';
+import { X, FileText, Download, ExternalLink, CheckCircle2 } from 'lucide-react';
 import { assetUrl } from '@/lib/assets';
 
 interface BrochureModalProps {
@@ -8,10 +8,20 @@ interface BrochureModalProps {
 }
 
 export const BrochureModal: React.FC<BrochureModalProps> = ({ isOpen, onClose }) => {
+  // Close on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    if (isOpen) {
+      window.addEventListener('keydown', handleKeyDown);
+    }
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const handleDownload = () => {
-    // Download the authentic, beautifully formatted multi-page Corporate Profile PDF
     const link = document.createElement('a');
     link.href = assetUrl('/Jithesh_Engineers_Corporate_Profile.pdf');
     link.download = 'Jithesh_Engineers_Corporate_Profile.pdf';
@@ -21,156 +31,101 @@ export const BrochureModal: React.FC<BrochureModalProps> = ({ isOpen, onClose })
   };
 
   const handleViewPrint = () => {
-    // Open the high-resolution printable profile in a new tab for instant viewing / printing
     window.open(assetUrl('/corporate-profile-print.html'), '_blank');
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[92vh]">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-slate-950/75 backdrop-blur-sm animate-in fade-in duration-200 select-none"
+      onClick={onClose}
+    >
+      <div
+        className="relative w-full max-w-md bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-slate-200 overflow-hidden animate-in zoom-in-95 duration-200"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Modal Header */}
-        <div className="p-5 sm:p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+        <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center shadow-sm">
-              <FileText className="w-5 h-5" />
+            <div className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center shadow-sm shrink-0">
+              <FileText className="w-5 h-5 text-white" />
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-tight">
-                  Corporate Profile & Capabilities
-                </h3>
-                <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-slate-200/80 text-slate-800">
-                  PDF Dossier
-                </span>
-              </div>
-              <p className="text-xs text-slate-500 mt-0.5">
-                Jithesh Engineers Pvt. Ltd. • 4-Page Official Presentation
+              <h3 className="text-base font-bold text-slate-900 leading-tight">
+                Corporate Profile
+              </h3>
+              <p className="text-xs text-slate-500 mt-0.5 font-medium">
+                Official Presentation Dossier (PDF)
               </p>
             </div>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="p-2 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-200 transition-colors"
+            className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-colors"
             aria-label="Close modal"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 
-        {/* Modal Body */}
-        <div className="p-5 sm:p-6 overflow-y-auto space-y-5 text-sm">
-          {/* Quick Stats Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/80 text-center">
-              <div className="text-lg font-bold text-slate-900 font-mono">18+ Years</div>
-              <div className="text-[11px] text-slate-500">Practice Experience</div>
+        {/* Modal Body - Clean & Minimal */}
+        <div className="p-4 sm:p-5 space-y-3.5">
+          {/* Document Preview Card */}
+          <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-2.5">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-slate-200 text-slate-800">
+                4-Page Document
+              </span>
+              <span className="text-[11px] font-mono text-slate-500">
+                PDF • 950 KB
+              </span>
             </div>
-            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/80 text-center">
-              <div className="text-lg font-bold text-slate-900 font-mono">2008</div>
-              <div className="text-[11px] text-slate-500">Year Established</div>
-            </div>
-            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/80 text-center">
-              <div className="text-lg font-bold text-slate-900 font-mono">100+</div>
-              <div className="text-[11px] text-slate-500">Major Projects</div>
-            </div>
-            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/80 text-center">
-              <div className="text-lg font-bold text-slate-900 font-mono">India & Gulf</div>
-              <div className="text-[11px] text-slate-500">Regional Footprint</div>
-            </div>
-          </div>
 
-          {/* Dossier Structure / Content Breakdown */}
-          <div>
-            <h4 className="text-xs font-mono uppercase tracking-wider text-slate-500 font-semibold mb-2.5">
-              Included in the 4-Page Corporate Profile PDF:
-            </h4>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-700">
-              <div className="flex items-start gap-2 p-2.5 rounded-lg bg-slate-50 border border-slate-100">
-                <CheckCircle className="w-4 h-4 text-slate-700 shrink-0 mt-0.5" />
-                <div>
-                  <strong className="block text-slate-900">Page 1: Executive Cover</strong>
-                  <span>Firm qualifications, banner visual & practice metrics.</span>
-                </div>
-              </div>
-              <div className="flex items-start gap-2 p-2.5 rounded-lg bg-slate-50 border border-slate-100">
-                <CheckCircle className="w-4 h-4 text-slate-700 shrink-0 mt-0.5" />
-                <div>
-                  <strong className="block text-slate-900">Page 2: Leadership & Awards</strong>
-                  <span>Er. K. Jithesh credentials, CEng/MIE & national honors.</span>
-                </div>
-              </div>
-              <div className="flex items-start gap-2 p-2.5 rounded-lg bg-slate-50 border border-slate-100">
-                <CheckCircle className="w-4 h-4 text-slate-700 shrink-0 mt-0.5" />
-                <div>
-                  <strong className="block text-slate-900">Page 3: Disciplines & Codes</strong>
-                  <span>High-rise RCC, steel PEB, spatial trusses & IS/ACI standards.</span>
-                </div>
-              </div>
-              <div className="flex items-start gap-2 p-2.5 rounded-lg bg-slate-50 border border-slate-100">
-                <CheckCircle className="w-4 h-4 text-slate-700 shrink-0 mt-0.5" />
-                <div>
-                  <strong className="block text-slate-900">Page 4: Clientele & Contact</strong>
-                  <span>Select builders (Landmark, Pentium, KHRWS) & Calicut HQ.</span>
-                </div>
-              </div>
+            <div>
+              <h4 className="text-sm font-bold text-slate-900 leading-snug">
+                Jithesh Engineers Pvt. Ltd.
+              </h4>
+              <p className="text-xs text-slate-600 mt-1 leading-relaxed">
+                Complete overview of our structural engineering capabilities, technical disciplines, IS/ACI design standards, and projects across India & Saudi Arabia.
+              </p>
             </div>
-          </div>
 
-          {/* Leadership Spotlight Card */}
-          <div className="p-3.5 sm:p-4 rounded-xl bg-slate-50 border border-slate-200/90 flex items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <img
-                src={assetUrl('/real-assets/director.jpg')}
-                alt="Er. K. Jithesh"
-                className="w-12 h-14 rounded-lg object-cover object-top border border-slate-200 shrink-0"
-                loading="lazy"
-                decoding="async"
-              />
-              <div>
-                <div className="text-[10px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
-                  Founder & Chief Structural Engineer
-                </div>
-                <div className="text-sm font-bold text-slate-900">Er. K. Jithesh</div>
-                <div className="text-xs text-slate-600">
-                  MTech (Structural) • CEng • MIE • ICI (Practicing since 1991)
-                </div>
+            {/* 3 Minimal Highlights */}
+            <div className="pt-2 border-t border-slate-200/70 space-y-1 text-xs text-slate-700">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-3.5 h-3.5 text-slate-700 shrink-0" />
+                <span>Structural analysis, PEB steel & BIM detailing</span>
               </div>
-            </div>
-            <div className="hidden sm:block text-right text-xs font-mono text-slate-500">
-              Calicut, Kerala
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-3.5 h-3.5 text-slate-700 shrink-0" />
+                <span>IS 456, IS 800, IS 1893 & ACI 318 compliant</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-3.5 h-3.5 text-slate-700 shrink-0" />
+                <span>Notable project portfolio & leadership credentials</span>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Modal Footer */}
-        <div className="p-4 sm:p-5 border-t border-slate-100 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-slate-50">
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={handleViewPrint}
-              className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 border border-slate-300 hover:bg-slate-200/70 text-slate-700 rounded-lg text-xs font-semibold transition-colors"
-            >
-              <Printer className="w-3.5 h-3.5" />
-              <span>Preview / Print</span>
-              <ExternalLink className="w-3 h-3 text-slate-400" />
-            </button>
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-3 py-2 text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors"
-            >
-              Close
-            </button>
-          </div>
-
+        {/* Modal Actions */}
+        <div className="p-4 sm:p-5 pt-0 sm:pt-0 space-y-2">
           <button
             type="button"
             onClick={handleDownload}
-            className="inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-lg shadow-sm active:scale-95 transition-all"
+            className="w-full inline-flex items-center justify-center gap-2 py-3 px-4 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold uppercase tracking-wider rounded-xl shadow-md active:scale-95 transition-all"
           >
             <Download className="w-4 h-4" />
             <span>Download Corporate Profile (PDF)</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={handleViewPrint}
+            className="w-full inline-flex items-center justify-center gap-2 py-2 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition-colors active:scale-95"
+          >
+            <span>Preview in Browser / Print</span>
+            <ExternalLink className="w-3.5 h-3.5 text-slate-500" />
           </button>
         </div>
       </div>
