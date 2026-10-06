@@ -167,6 +167,11 @@ export const ServiceCardsRow: React.FC = () => {
       if (e.touches.length !== 1) return;
       if ((e.target as HTMLElement).closest('button, a, .card-yellow-btn')) return;
 
+      // Stop any in-flight GSAP animation immediately so finger has instant 1:1 control
+      gsap.killTweensOf(animPosRef.current);
+      targetPosRef.current = Math.round(animPosRef.current.pos);
+      setActiveIndexFloat(targetPosRef.current);
+
       const touch = e.touches[0];
       touchStartX = touch.clientX;
       touchStartY = touch.clientY;
@@ -188,10 +193,13 @@ export const ServiceCardsRow: React.FC = () => {
 
       // Determine intent on first few pixels
       if (!isHorizontalSwipe && !isVerticalScroll) {
-        if (Math.abs(dy) > 6 && Math.abs(dy) > Math.abs(dx)) {
+        // Intentionally scroll vertical only if dy strongly dominates
+        if (Math.abs(dy) > 18 && Math.abs(dy) > Math.abs(dx) * 1.8) {
           isVerticalScroll = true;
           return;
-        } else if (Math.abs(dx) > 6 && Math.abs(dx) >= Math.abs(dy)) {
+        } else if (Math.abs(dx) >= 6 && Math.abs(dx) >= Math.abs(dy) * 0.5) {
+          isHorizontalSwipe = true;
+        } else if (Math.abs(dx) > 10) {
           isHorizontalSwipe = true;
         } else {
           return;
@@ -258,6 +266,11 @@ export const ServiceCardsRow: React.FC = () => {
     const onMouseDown = (e: MouseEvent) => {
       if (e.button !== 0) return;
       if ((e.target as HTMLElement).closest('button, a, .card-yellow-btn')) return;
+
+      gsap.killTweensOf(animPosRef.current);
+      targetPosRef.current = Math.round(animPosRef.current.pos);
+      setActiveIndexFloat(targetPosRef.current);
+
       mouseStartX = e.clientX;
       mouseStartTime = Date.now();
       isMouseDragging = true;
@@ -307,11 +320,18 @@ export const ServiceCardsRow: React.FC = () => {
     el.addEventListener('touchmove', onTouchMove, { passive: false });
     el.addEventListener('touchend', onTouchEnd, { passive: true });
     el.addEventListener('touchcancel', onTouchCancel, { passive: true });
+    window.addEventListener('touchend', onTouchEnd, { passive: true });
+    window.addEventListener('touchcancel', onTouchCancel, { passive: true });
 
     // Desktop mouse listeners
     el.addEventListener('mousedown', onMouseDown);
     window.addEventListener('mousemove', onMouseMove);
     window.addEventListener('mouseup', onMouseUp);
+
+    const onResize = () => {
+      applyCardTransforms(targetPosRef.current, window.innerWidth < 768);
+    };
+    window.addEventListener('resize', onResize);
 
     // Initial layout pass: ensure Card 03 is centered on load
     applyCardTransforms(START_INDEX, window.innerWidth < 768);
@@ -322,9 +342,12 @@ export const ServiceCardsRow: React.FC = () => {
       el.removeEventListener('touchmove', onTouchMove);
       el.removeEventListener('touchend', onTouchEnd);
       el.removeEventListener('touchcancel', onTouchCancel);
+      window.removeEventListener('touchend', onTouchEnd);
+      window.removeEventListener('touchcancel', onTouchCancel);
       el.removeEventListener('mousedown', onMouseDown);
       window.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('mouseup', onMouseUp);
+      window.removeEventListener('resize', onResize);
       clearTimeout(accTimer);
     };
   }, [goToCard, applyCardTransforms]);
