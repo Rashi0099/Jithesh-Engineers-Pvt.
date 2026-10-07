@@ -27,9 +27,7 @@ export const ClientsSection: React.FC = () => {
               Our  Clients
             </h2>
           </div>
-          <p className="text-slate-600 text-xs sm:text-sm max-w-md">
-            Delivering structural engineering consultancy for premier builders, developers, and corporate institutions.
-          </p>
+       
         </div>
       </Container>
 

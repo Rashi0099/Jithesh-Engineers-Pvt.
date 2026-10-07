@@ -80,9 +80,7 @@ export const ProjectsSection: React.FC = () => {
             Our Projects
           </h2>
           <div className="w-16 h-1 bg-brand-navy mt-2.5 rounded-full" />
-          <p className="mt-3 text-sm sm:text-base text-slate-600 max-w-2xl">
-            Selected structural engineering projects across residential, commercial, industrial, and specialized sectors.
-          </p>
+          
         </div>
 
         {/* Photo-First Projects Grid */}

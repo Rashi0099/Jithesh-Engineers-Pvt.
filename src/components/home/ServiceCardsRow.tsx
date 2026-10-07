@@ -412,9 +412,7 @@ export const ServiceCardsRow: React.FC = () => {
                 <span>Our Services</span>
               </div>
             </div>
-            <p className="text-xs sm:text-sm text-slate-400 max-w-md leading-relaxed hidden sm:block">
-              From conceptual design to construction support, we deliver precision engineering across sectors.
-            </p>
+           
           </div>
 
           {/* Interactive Carousel Stage */}

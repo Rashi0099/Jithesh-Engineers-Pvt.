@@ -158,9 +158,7 @@ export const CareersSection: React.FC = () => {
             <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
               Join Our Engineering Practice
             </h2>
-            <p className="text-sm text-slate-600 leading-relaxed">
-              We seek qualified structural design engineers, BIM modelers, and site specialists committed to engineering rigor and professional excellence.
-            </p>
+           
           </div>
           <span className="self-start md:self-auto px-3.5 py-1.5 rounded-md bg-slate-100 text-slate-800 text-xs font-mono font-medium border border-slate-200">
             {OPENINGS.length} Positions Available

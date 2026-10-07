@@ -61,9 +61,7 @@ export const ServicesSection: React.FC = () => {
                 Core Structural Services
               </h2>
             </div>
-            <p className="text-xs sm:text-sm text-slate-600 max-w-md sm:text-right">
-              From high-rise analysis to BIM rebar detailing and structural health audits.
-            </p>
+          
           </div>
         </div>
 
