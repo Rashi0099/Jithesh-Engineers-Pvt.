@@ -25,13 +25,13 @@ export const Home: React.FC = () => {
         <StatsBar />
         <ServiceCardsRow />
       </div>
-      <div className="section-deferred"><AboutSection /></div>
-      <div className="section-deferred"><ClientsSection /></div>
-      <div className="section-deferred"><ServicesSection /></div>
-      <div className="section-deferred"><ProjectsSection /></div>
-      <div className="section-deferred"><CareersSection /></div>
-      <div className="section-deferred"><OurReachSection /></div>
-      <div className="section-deferred"><ContactSection /></div>
+      <AboutSection />
+      <ClientsSection />
+      <ServicesSection />
+      <ProjectsSection />
+      <CareersSection />
+      <OurReachSection />
+      <ContactSection />
     </div>
   );
 };

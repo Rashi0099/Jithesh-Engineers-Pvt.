@@ -117,7 +117,7 @@ export const ServicesSection: React.FC = () => {
               </div>
 
               {/* Real Technical Deliverables Checklist */}
-              <div className="space-y-2 pt-0.5">
+              <div className="hidden sm:block space-y-2 pt-0.5">
                 <h4 className="text-[11px] font-bold uppercase tracking-wider text-slate-500 font-mono">
                   Key Technical Scope & Deliverables
                 </h4>
