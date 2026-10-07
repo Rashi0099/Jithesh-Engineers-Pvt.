@@ -52,13 +52,13 @@ export const OurReachSection: React.FC = () => {
         {/* 3 Regional Cards (UNDER / BELOW THE IMAGE BANNER - Compact & Iconless) */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5">
           {/* Card 1: Kerala, India */}
-          <div className="p-5 sm:p-5.5 rounded-2xl border border-slate-200/90 bg-slate-50 hover:bg-white shadow-xs hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col justify-between group">
+          <div className="p-5 sm:p-5.5 rounded-2xl border border-blue-200/80 bg-gradient-to-b from-[#eaf2fc] via-[#f0f6fd] to-[#f7fafe] hover:border-blue-300/90 shadow-xs hover:shadow-md transition-all duration-300 flex flex-col justify-between group">
             <div>
               <div className="flex items-center justify-between mb-3">
-                <span className="text-[10px] font-mono font-bold uppercase tracking-widest px-2.5 py-0.5 rounded-md bg-white text-slate-800 border border-slate-200 shadow-2xs">
+                <span className="text-[10px] font-mono font-bold uppercase tracking-widest px-2.5 py-0.5 rounded-md bg-white text-slate-900 border border-blue-200/80 shadow-2xs">
                   HEADQUARTERS
                 </span>
-                <span className="text-[10px] font-mono text-slate-500 font-semibold">Kerala</span>
+                <span className="text-[10px] font-mono text-blue-700/80 font-semibold">Kerala</span>
               </div>
               <h3 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight mb-1.5">
                 Kerala, India
@@ -67,19 +67,19 @@ export const OurReachSection: React.FC = () => {
                 Headquartered in Calicut with active projects across Kozhikode, Kochi, Malappuram, Wayanad, and Kannur.
               </p>
             </div>
-            <div className="pt-2.5 text-[11px] font-mono font-semibold text-slate-500 border-t border-slate-200/70">
+            <div className="pt-2.5 text-[11px] font-mono font-semibold text-slate-600 border-t border-blue-200/80">
               Karaparamba, Kozhikode - 673010
             </div>
           </div>
 
           {/* Card 2: Pan-India Operations */}
-          <div className="p-5 sm:p-5.5 rounded-2xl border border-slate-200/90 bg-slate-50 hover:bg-white shadow-xs hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col justify-between group">
+          <div className="p-5 sm:p-5.5 rounded-2xl border border-blue-200/80 bg-gradient-to-b from-[#eaf2fc] via-[#f0f6fd] to-[#f7fafe] hover:border-blue-300/90 shadow-xs hover:shadow-md transition-all duration-300 flex flex-col justify-between group">
             <div>
               <div className="flex items-center justify-between mb-3">
-                <span className="text-[10px] font-mono font-bold uppercase tracking-widest px-2.5 py-0.5 rounded-md bg-white text-slate-800 border border-slate-200 shadow-2xs">
+                <span className="text-[10px] font-mono font-bold uppercase tracking-widest px-2.5 py-0.5 rounded-md bg-white text-slate-900 border border-blue-200/80 shadow-2xs">
                   NATIONAL
                 </span>
-                <span className="text-[10px] font-mono text-slate-500 font-semibold">Pan-India</span>
+                <span className="text-[10px] font-mono text-blue-700/80 font-semibold">Pan-India</span>
               </div>
               <h3 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight mb-1.5">
                 Pan-India Operations
@@ -88,19 +88,19 @@ export const OurReachSection: React.FC = () => {
                 Providing structural analysis, PEB industrial sheds, and multi-story commercial consultancies across Indian states.
               </p>
             </div>
-            <div className="pt-2.5 text-[11px] font-mono font-semibold text-slate-500 border-t border-slate-200/70">
+            <div className="pt-2.5 text-[11px] font-mono font-semibold text-slate-600 border-t border-blue-200/80">
               Residential, Commercial & Industrial
             </div>
           </div>
 
           {/* Card 3: Saudi Arabia & Gulf */}
-          <div className="p-5 sm:p-5.5 rounded-2xl border border-slate-200/90 bg-slate-50 hover:bg-white shadow-xs hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col justify-between group">
+          <div className="p-5 sm:p-5.5 rounded-2xl border border-blue-200/80 bg-gradient-to-b from-[#eaf2fc] via-[#f0f6fd] to-[#f7fafe] hover:border-blue-300/90 shadow-xs hover:shadow-md transition-all duration-300 flex flex-col justify-between group">
             <div>
               <div className="flex items-center justify-between mb-3">
-                <span className="text-[10px] font-mono font-bold uppercase tracking-widest px-2.5 py-0.5 rounded-md bg-white text-slate-800 border border-slate-200 shadow-2xs">
+                <span className="text-[10px] font-mono font-bold uppercase tracking-widest px-2.5 py-0.5 rounded-md bg-white text-slate-900 border border-blue-200/80 shadow-2xs">
                   INTERNATIONAL
                 </span>
-                <span className="text-[10px] font-mono text-slate-500 font-semibold">Gulf Region</span>
+                <span className="text-[10px] font-mono text-blue-700/80 font-semibold">Gulf Region</span>
               </div>
               <h3 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight mb-1.5">
                 Saudi Arabia & Gulf
@@ -109,7 +109,7 @@ export const OurReachSection: React.FC = () => {
                 High-profile long-span spatial trusses, space frame canopies, and specialized structural consultancies.
               </p>
             </div>
-            <div className="pt-2.5 text-[11px] font-mono font-semibold text-slate-500 border-t border-slate-200/70">
+            <div className="pt-2.5 text-[11px] font-mono font-semibold text-slate-600 border-t border-blue-200/80">
               Riyadh & Middle Eastern Sites
             </div>
           </div>

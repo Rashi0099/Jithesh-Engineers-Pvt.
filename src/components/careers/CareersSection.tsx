@@ -176,48 +176,44 @@ export const CareersSection: React.FC = () => {
             return (
               <div
                 key={job.id}
-                className={`rounded-xl border transition-all duration-300 bg-white overflow-hidden ${
+                className={`rounded-xl border transition-all duration-300 overflow-hidden bg-gradient-to-r from-[#040915] via-[#08152c] to-[#0d2144] ${
                   isExpanded
-                    ? 'border-slate-400 shadow-md ring-1 ring-slate-400/30'
-                    : 'border-slate-200 hover:border-slate-300 hover:shadow-sm'
+                    ? 'border-blue-400/60 shadow-xl ring-2 ring-blue-500/20'
+                    : 'border-blue-900/60 hover:border-blue-600/60 shadow-md hover:shadow-xl hover:shadow-black/40'
                 }`}
               >
                 {/* Job Summary Row */}
                 <div className="p-5 sm:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div className="space-y-2">
                     <div className="flex flex-wrap items-center gap-2.5">
-                      <h3 className="text-base sm:text-lg font-bold text-slate-900">
+                      <h3 className="text-base sm:text-lg font-bold text-white tracking-tight">
                         {job.title}
                       </h3>
-                      <span className="px-2.5 py-0.5 rounded text-xs font-mono bg-slate-100 text-slate-700 border border-slate-200">
+                      <span className="px-2.5 py-0.5 rounded text-xs font-mono bg-blue-500/15 text-blue-200 border border-blue-400/25 shadow-2xs backdrop-blur-xs">
                         {job.department}
                       </span>
                     </div>
-                    <div className="flex flex-wrap items-center gap-4 text-xs text-slate-500 font-medium">
+                    <div className="flex flex-wrap items-center gap-4 text-xs text-blue-200/80 font-medium">
                       <span className="flex items-center gap-1.5">
-                        <MapPin className="w-3.5 h-3.5 text-slate-400" />
+                        <MapPin className="w-3.5 h-3.5 text-blue-400" />
                         {job.location}
                       </span>
                       <span className="flex items-center gap-1.5">
-                        <Clock className="w-3.5 h-3.5 text-slate-400" />
+                        <Clock className="w-3.5 h-3.5 text-blue-400" />
                         {job.type}
                       </span>
                       <span className="flex items-center gap-1.5">
-                        <Briefcase className="w-3.5 h-3.5 text-slate-400" />
+                        <Briefcase className="w-3.5 h-3.5 text-blue-400" />
                         {job.experience}
                       </span>
                     </div>
                   </div>
 
-                  <div className="shrink-0 flex items-center gap-3">
+                  <div className="w-full md:w-auto flex items-center justify-end gap-3 shrink-0 pt-1 md:pt-0">
                     <button
                       type="button"
                       onClick={() => toggleApply(job.id)}
-                      className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-xs font-semibold uppercase tracking-wider transition-all active:scale-95 ${
-                        isExpanded
-                          ? 'bg-slate-100 text-slate-800 border border-slate-300'
-                          : 'bg-slate-900 text-white hover:bg-slate-800 shadow-sm'
-                      }`}
+                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-xs font-semibold uppercase tracking-wider transition-all active:scale-95 bg-white/10 hover:bg-white/20 text-white border border-white/20 shadow-sm"
                     >
                       <span>{isExpanded ? 'Close Form' : 'Apply Now'}</span>
                       {isExpanded ? (
@@ -231,10 +227,10 @@ export const CareersSection: React.FC = () => {
 
                 {/* Inline Application Form Drawer */}
                 {isExpanded && (
-                  <div className="border-t border-slate-200 bg-slate-50/70 p-5 sm:p-7 animate-in fade-in duration-300">
+                  <div className="border-t border-blue-200/80 bg-gradient-to-b from-[#eaf2fc] via-[#f0f6fd] to-[#f7fafe] p-5 sm:p-7 animate-in fade-in duration-300">
                     {isSuccess ? (
                       /* Success State */
-                      <div className="bg-white border border-emerald-200 rounded-xl p-6 text-center max-w-lg mx-auto shadow-sm space-y-3">
+                      <div className="bg-white border border-emerald-300 rounded-xl p-6 text-center max-w-lg mx-auto shadow-md space-y-3">
                         <div className="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto">
                           <CheckCircle2 className="w-6 h-6" />
                         </div>
@@ -251,7 +247,7 @@ export const CareersSection: React.FC = () => {
                               setSubmittedJobId(null);
                               setActiveJobId(null);
                             }}
-                            className="px-5 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-lg transition-colors"
+                            className="px-5 py-2 bg-[#08152c] hover:bg-[#0d2144] text-white text-xs font-semibold rounded-lg transition-all shadow-sm"
                           >
                             Close
                           </button>
@@ -263,9 +259,9 @@ export const CareersSection: React.FC = () => {
                         onSubmit={handleSubmit}
                         className="max-w-2xl mx-auto space-y-4"
                       >
-                        <div className="flex items-center justify-between border-b border-slate-200 pb-3">
+                        <div className="flex items-center justify-between border-b border-blue-200/80 pb-3">
                           <div>
-                            <span className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
+                            <span className="text-[11px] font-mono uppercase tracking-wider text-blue-700 font-bold">
                               Direct Application
                             </span>
                             <h4 className="text-sm sm:text-base font-bold text-slate-900">
@@ -275,7 +271,7 @@ export const CareersSection: React.FC = () => {
                           <button
                             type="button"
                             onClick={() => setActiveJobId(null)}
-                            className="p-1 rounded text-slate-400 hover:text-slate-700 hover:bg-slate-200 transition-colors"
+                            className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-blue-100 transition-colors"
                             aria-label="Close application form"
                           >
                             <X className="w-4 h-4" />
@@ -285,7 +281,7 @@ export const CareersSection: React.FC = () => {
                         {/* Name & Email */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           <div>
-                            <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+                            <label className="block text-xs font-semibold text-slate-800 mb-1.5">
                               Full Name <span className="text-rose-500">*</span>
                             </label>
                             <input
@@ -295,11 +291,11 @@ export const CareersSection: React.FC = () => {
                               value={formData.fullName}
                               onChange={handleInputChange}
                               placeholder="e.g. Rahul Nair"
-                              className="w-full px-3.5 py-2.5 rounded-lg bg-white border border-slate-200 text-slate-900 text-xs sm:text-sm focus:outline-none focus:border-slate-900 transition-all"
+                              className="w-full px-3.5 py-2.5 rounded-lg bg-white border border-blue-200 text-slate-900 text-xs sm:text-sm focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20 transition-all shadow-2xs"
                             />
                           </div>
                           <div>
-                            <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+                            <label className="block text-xs font-semibold text-slate-800 mb-1.5">
                               Email Address <span className="text-rose-500">*</span>
                             </label>
                             <input
@@ -309,7 +305,7 @@ export const CareersSection: React.FC = () => {
                               value={formData.email}
                               onChange={handleInputChange}
                               placeholder="e.g. rahul@example.com"
-                              className="w-full px-3.5 py-2.5 rounded-lg bg-white border border-slate-200 text-slate-900 text-xs sm:text-sm focus:outline-none focus:border-slate-900 transition-all"
+                              className="w-full px-3.5 py-2.5 rounded-lg bg-white border border-blue-200 text-slate-900 text-xs sm:text-sm focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20 transition-all shadow-2xs"
                             />
                           </div>
                         </div>
@@ -317,7 +313,7 @@ export const CareersSection: React.FC = () => {
                         {/* Phone & Experience */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           <div>
-                            <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+                            <label className="block text-xs font-semibold text-slate-800 mb-1.5">
                               Phone / WhatsApp Number <span className="text-rose-500">*</span>
                             </label>
                             <input
@@ -327,11 +323,11 @@ export const CareersSection: React.FC = () => {
                               value={formData.phone}
                               onChange={handleInputChange}
                               placeholder="+91 98765 43210"
-                              className="w-full px-3.5 py-2.5 rounded-lg bg-white border border-slate-200 text-slate-900 text-xs sm:text-sm focus:outline-none focus:border-slate-900 transition-all"
+                              className="w-full px-3.5 py-2.5 rounded-lg bg-white border border-blue-200 text-slate-900 text-xs sm:text-sm focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20 transition-all shadow-2xs"
                             />
                           </div>
                           <div>
-                            <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+                            <label className="block text-xs font-semibold text-slate-800 mb-1.5">
                               Total Experience / Current Role
                             </label>
                             <input
@@ -340,14 +336,14 @@ export const CareersSection: React.FC = () => {
                               value={formData.experience}
                               onChange={handleInputChange}
                               placeholder="e.g. 4 years • Structural Designer"
-                              className="w-full px-3.5 py-2.5 rounded-lg bg-white border border-slate-200 text-slate-900 text-xs sm:text-sm focus:outline-none focus:border-slate-900 transition-all"
+                              className="w-full px-3.5 py-2.5 rounded-lg bg-white border border-blue-200 text-slate-900 text-xs sm:text-sm focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20 transition-all shadow-2xs"
                             />
                           </div>
                         </div>
 
                         {/* Upload CV Box */}
                         <div>
-                          <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+                          <label className="block text-xs font-semibold text-slate-800 mb-1.5">
                             Upload CV / Resume <span className="text-rose-500">*</span>
                           </label>
 
@@ -360,7 +356,7 @@ export const CareersSection: React.FC = () => {
                           />
 
                           {formData.cvFile ? (
-                            <div className="flex items-center justify-between p-3.5 bg-white border border-slate-300 rounded-lg">
+                            <div className="flex items-center justify-between p-3.5 bg-white border border-blue-200 rounded-lg shadow-2xs">
                               <div className="flex items-center gap-3">
                                 <FileCheck className="w-5 h-5 text-emerald-600 shrink-0" />
                                 <div>
@@ -454,15 +450,21 @@ export const CareersSection: React.FC = () => {
         </div>
 
         {/* General Application Banner with Direct Drawer */}
-        <div className="mt-8 rounded-xl bg-slate-50 border border-slate-200 overflow-hidden">
+        <div
+          className={`mt-8 rounded-xl border transition-all duration-300 overflow-hidden bg-gradient-to-r from-[#040915] via-[#08152c] to-[#0d2144] ${
+            activeJobId === 'general'
+              ? 'border-blue-400/60 shadow-xl ring-2 ring-blue-500/20'
+              : 'border-blue-900/60 hover:border-blue-600/60 shadow-md hover:shadow-xl hover:shadow-black/40'
+          }`}
+        >
           <div className="p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-xs sm:text-sm text-slate-600 text-center sm:text-left">
+            <p className="text-xs sm:text-sm text-blue-100 font-medium text-center sm:text-left leading-relaxed">
               Don't see a matching vacancy? Send your CV and engineering portfolio to our recruitment desk.
             </p>
             <button
               type="button"
               onClick={() => toggleApply('general')}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-900 text-white text-xs font-semibold hover:bg-slate-800 transition-colors shrink-0"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-xs font-semibold uppercase tracking-wider transition-all active:scale-95 bg-white/10 hover:bg-white/20 text-white border border-white/20 shadow-sm shrink-0"
             >
               <span>{activeJobId === 'general' ? 'Close Form' : 'General Application'}</span>
               {activeJobId === 'general' ? (
@@ -474,9 +476,9 @@ export const CareersSection: React.FC = () => {
           </div>
 
           {activeJobId === 'general' && (
-            <div className="border-t border-slate-200 bg-white p-5 sm:p-7 animate-in fade-in duration-300">
+            <div className="border-t border-blue-200/80 bg-gradient-to-b from-[#eaf2fc] via-[#f0f6fd] to-[#f7fafe] p-5 sm:p-7 animate-in fade-in duration-300">
               {submittedJobId === 'general' ? (
-                <div className="border border-emerald-200 bg-emerald-50/50 rounded-xl p-6 text-center max-w-lg mx-auto space-y-2">
+                <div className="border border-emerald-300 bg-white rounded-xl p-6 text-center max-w-lg mx-auto shadow-md space-y-2">
                   <CheckCircle2 className="w-7 h-7 text-emerald-600 mx-auto" />
                   <h3 className="text-sm font-bold text-slate-900">Resume Received!</h3>
                   <p className="text-xs text-slate-600">
@@ -490,7 +492,7 @@ export const CareersSection: React.FC = () => {
                 >
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label htmlFor="general-fullName" className="block text-xs font-semibold text-slate-700 mb-1">
+                      <label htmlFor="general-fullName" className="block text-xs font-semibold text-slate-800 mb-1">
                         Full Name *
                       </label>
                       <input
@@ -501,11 +503,11 @@ export const CareersSection: React.FC = () => {
                         value={formData.fullName}
                         onChange={handleInputChange}
                         placeholder="Your Name"
-                        className="w-full px-3 py-2 rounded-lg bg-slate-50 border border-slate-200 text-xs sm:text-sm focus:bg-white focus:outline-none focus:border-slate-900"
+                        className="w-full px-3 py-2 rounded-lg bg-white border border-blue-200 text-slate-900 text-xs sm:text-sm focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20 transition-all shadow-2xs"
                       />
                     </div>
                     <div>
-                      <label htmlFor="general-email" className="block text-xs font-semibold text-slate-700 mb-1">
+                      <label htmlFor="general-email" className="block text-xs font-semibold text-slate-800 mb-1">
                         Email Address *
                       </label>
                       <input
@@ -516,14 +518,14 @@ export const CareersSection: React.FC = () => {
                         value={formData.email}
                         onChange={handleInputChange}
                         placeholder="your@email.com"
-                        className="w-full px-3 py-2 rounded-lg bg-slate-50 border border-slate-200 text-xs sm:text-sm focus:bg-white focus:outline-none focus:border-slate-900"
+                        className="w-full px-3 py-2 rounded-lg bg-white border border-blue-200 text-slate-900 text-xs sm:text-sm focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20 transition-all shadow-2xs"
                       />
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label htmlFor="general-phone" className="block text-xs font-semibold text-slate-700 mb-1">
+                      <label htmlFor="general-phone" className="block text-xs font-semibold text-slate-800 mb-1">
                         Phone Number *
                       </label>
                       <input
@@ -534,11 +536,11 @@ export const CareersSection: React.FC = () => {
                         value={formData.phone}
                         onChange={handleInputChange}
                         placeholder="+91 98765 43210"
-                        className="w-full px-3 py-2 rounded-lg bg-slate-50 border border-slate-200 text-xs sm:text-sm focus:bg-white focus:outline-none focus:border-slate-900"
+                        className="w-full px-3 py-2 rounded-lg bg-white border border-blue-200 text-slate-900 text-xs sm:text-sm focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20 transition-all shadow-2xs"
                       />
                     </div>
                     <div>
-                      <label htmlFor="general-experience" className="block text-xs font-semibold text-slate-700 mb-1">
+                      <label htmlFor="general-experience" className="block text-xs font-semibold text-slate-800 mb-1">
                         Field of Interest / Specialization
                       </label>
                       <input
@@ -548,13 +550,13 @@ export const CareersSection: React.FC = () => {
                         value={formData.experience}
                         onChange={handleInputChange}
                         placeholder="e.g. Structural Modeling / Site Inspection"
-                        className="w-full px-3 py-2 rounded-lg bg-slate-50 border border-slate-200 text-xs sm:text-sm focus:bg-white focus:outline-none focus:border-slate-900"
+                        className="w-full px-3 py-2 rounded-lg bg-white border border-blue-200 text-slate-900 text-xs sm:text-sm focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20 transition-all shadow-2xs"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    <label className="block text-xs font-semibold text-slate-800 mb-1">
                       Upload Resume / CV *
                     </label>
                     <input
@@ -562,7 +564,7 @@ export const CareersSection: React.FC = () => {
                       ref={fileInputRef}
                       onChange={handleFileChange}
                       accept=".pdf,.doc,.docx"
-                      className="w-full text-xs text-slate-600 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-900 file:text-white hover:file:bg-slate-800"
+                      className="w-full text-xs text-slate-600 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-[#08152c] file:text-white hover:file:bg-[#0d2144] file:cursor-pointer transition-all"
                     />
                   </div>
 
@@ -570,14 +572,14 @@ export const CareersSection: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => setActiveJobId(null)}
-                      className="px-4 py-2 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-100"
+                      className="px-4 py-2 rounded-lg text-xs font-medium text-slate-700 hover:bg-blue-100/50 transition-colors"
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="px-5 py-2 rounded-lg bg-slate-900 text-white text-xs font-semibold hover:bg-slate-800"
+                      className="px-5 py-2.5 rounded-lg bg-[#08152c] text-white text-xs font-bold uppercase tracking-wider hover:bg-[#0d2144] transition-all shadow-md active:scale-95"
                     >
                       {isSubmitting ? 'Sending...' : 'Send General Application'}
                     </button>

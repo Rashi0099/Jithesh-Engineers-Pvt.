@@ -24,7 +24,7 @@ export const ClientsSection: React.FC = () => {
               <span>Trusted Partnerships</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-black text-slate-950 tracking-tight">
-              Our Esteemed Clients
+              Our  Clients
             </h2>
           </div>
           <p className="text-slate-600 text-xs sm:text-sm max-w-md">
